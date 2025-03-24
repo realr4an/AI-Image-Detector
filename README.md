@@ -26,7 +26,7 @@ Um das Projekt lokal zu starten, folge diesen Schritten:
 
 1. **Repository klonen:**
 ```bash
-git clone https://github.com/dein-benutzername/ai-image-detector.git
+git clone https://github.com/realr4an/ai-image-detector.git
 cd ai-image-detector
 ```
 
@@ -66,10 +66,4 @@ ai-image-detector/
 
 ## 🧑‍💻 Autor
 
-- **Dein Name** - [Dein GitHub-Profil](https://github.com/dein-benutzername)
-
----
-
-## 📜 Lizenz
-
-Dieses Projekt steht unter der MIT-Lizenz – siehe [LICENSE](LICENSE) Datei für weitere Informationen.
+- **realr4an** - [Dein GitHub-Profil](https://github.com/realr4an)
