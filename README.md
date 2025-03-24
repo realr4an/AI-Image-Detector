@@ -66,4 +66,4 @@ ai-image-detector/
 
 ## 🧑‍💻 Autor
 
-- **realr4an** - [Dein GitHub-Profil](https://github.com/realr4an)
+- **realr4an** - [realr4an](https://github.com/realr4an)
