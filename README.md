@@ -1,3 +1,5 @@
+> ⚠️ **ACHTUNG: Dieses Repository befindet sich aktuell in aktiver Entwicklung. Inhalte, Funktionen und Strukturen können sich kurzfristig ändern!**  
+> Bitte beachte, dass noch nicht alles vollständig implementiert oder final getestet ist. Feedback ist dennoch willkommen!
 
 # 🤖 AI Image Detector
 
