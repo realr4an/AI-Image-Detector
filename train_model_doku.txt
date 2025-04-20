@@ -1,0 +1,82 @@
+AI-Detector Trainingsskript – Dokumentation
+============================================
+
+🧠 ZIEL:
+-------
+Training eines CNN-Modells zur binären Klassifikation (z.B. "Echt" vs. "KI-generiert") mit Hilfe von Transfer Learning (ResNet50) unter Verwendung von TensorFlow / Keras.
+
+📁 DATENSTRUKTUR:
+-----------------
+Dataset/
+├── train/
+│   ├── Klasse1/
+│   └── Klasse2/
+├── validation/
+│   ├── Klasse1/
+│   └── Klasse2/
+└── test/            (optional, nur für finale Evaluation)
+
+📌 URSPRÜNGLICHES TRAINING (erste Version):
+-------------------------------------------
+1. Verwendung von ResNet50 mit vortrainierten ImageNet-Gewichten.
+2. Gefrorene ResNet50-Layer (keine Fine-Tuning-Phase).
+3. Dense-Klassifikationskopf: Flatten → Dense(128, relu) → Dropout(0.5) → Dense(1, sigmoid).
+4. Optimierung mit Adam, Loss: Binary Crossentropy.
+5. Verwendung von Mixed Precision Training (float16).
+6. Data Augmentation im Training (Rotation, Flip, Zoom, etc.).
+7. Callbacks:
+   - EarlyStopping
+   - ModelCheckpoint
+   - ReduceLROnPlateau
+8. Speicherung des besten Modells (`best_model.h5`) und finales Modell (`model.h5`).
+9. Optional: Test-Set-Auswertung (Loss, Accuracy).
+
+✅ VERBESSERUNGEN IN DER NEUEN VERSION:
+----------------------------------------
+1. **Modellstruktur**:
+   - `Flatten()` → ersetzt durch `GlobalAveragePooling2D()` für bessere Generalisierung.
+   - Dense(128) jetzt mit L2-Regularisierung (`l2(0.001)`).
+
+2. **Fine-Tuning**:
+   - Nach initialem Training: letzte 10 Schichten des ResNet50-Modells werden freigegeben und mit kleiner Lernrate (`1e-5`) weitertrainiert.
+
+3. **Trainingsphasen**:
+   - Initialtraining: 10 Epochen mit eingefrorenen ResNet-Layern.
+   - Fine-Tuning: zusätzliche 10 Epochen mit teilweiser Freigabe der Basis.
+
+4. **Monitoring & Visualisierung**:
+   - **TensorBoard**-Callback hinzugefügt: Logs werden unter `logs/fit/<timestamp>` gespeichert.
+   - Histogramme & Metriken werden automatisch protokolliert.
+
+5. **Evaluation**:
+   - Nach dem Training wird auf dem Test-Set (sofern vorhanden) nicht nur Accuracy, sondern auch:
+     - **Klassifikationsreport** (Precision, Recall, F1)
+     - **Konfusionsmatrix** ausgegeben.
+
+6. **Codequalität**:
+   - Bessere Trennung der Trainingsphasen.
+   - Logging-Ausgaben reduziert (`tf.get_logger().setLevel('ERROR')`).
+   - Saubere Modellspeicherung: `best_model_initial.h5`, `best_model_finetuned.h5`, `model_final.h5`.
+
+🔧 BENÖTIGTE PAKETE:
+---------------------
+- tensorflow
+- scikit-learn (für Klassifikationsreport & Konfusionsmatrix)
+- matplotlib (optional für Visualisierung)
+- tensorboard
+
+📦 INSTALLATIONSHINWEIS:
+-------------------------
+Falls scikit-learn fehlt:
+    pip install scikit-learn
+
+TensorBoard starten:
+    tensorboard --logdir logs/fit
+
+🌟 FAZIT:
+---------
+Die überarbeitete Version bietet:
+- bessere Generalisierung
+- gezielteres Training durch Fine-Tuning
+- transparente Überwachung durch TensorBoard
+- bessere Analyse durch zusätzliche Auswertungen
