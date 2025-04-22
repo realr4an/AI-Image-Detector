@@ -80,3 +80,33 @@ Die überarbeitete Version bietet:
 - gezielteres Training durch Fine-Tuning
 - transparente Überwachung durch TensorBoard
 - bessere Analyse durch zusätzliche Auswertungen
+
+📅 NEUER STAND: 20.04.2025
+---------------------------
+Basierend auf weiteren Experimenten und Erkenntnissen aus der TensorBoard-Analyse wurde das Trainingssetup weiter verbessert:
+
+1. **Erhöhte Epochenzahl**:
+   - Sowohl das Initialtraining als auch das Fine-Tuning laufen nun über **20 Epochen** (statt 10).
+   - Grund: Das Modell zeigte in den TensorBoard-Kurven (accuracy/loss), dass es bei 10 Epochen **noch nicht ausgelernt** war.
+
+2. **Erweiterte Fine-Tuning-Tiefe**:
+   - Statt nur 10 Schichten des ResNet50-Modells wurden jetzt die **letzten 50 Layer** zur weiteren Anpassung freigegeben.
+   - Dies ermöglicht es dem Modell, feinere Unterschiede zwischen echten und KI-generierten Bildern besser zu lernen.
+   - Hintergrund: Die Fake-Bilder im Datensatz sind qualitativ hochwertig und teils kaum unterscheidbar von realen – das Modell benötigt mehr Kapazität zur Feinjustierung.
+
+3. **Datenlage & Balance**:
+   - Das Training basiert auf ca. **193.538 Bildern** mit **ausgewogener Klassenverteilung** (Real vs. Fake).
+   - Damit sind ausreichende Daten vorhanden, um ein robustes Modell zu trainieren – Datenmangel oder Klassenschiefe sind **keine Schwachpunkte**.
+
+4. **Ziel der Verbesserungen**:
+   - Besseres Ausnutzen der Datenmenge durch längeres Training.
+   - Stärkere Modellanpassung durch tiefere Integration des vortrainierten ResNet50.
+   - Weiterhin Fokus auf Vermeidung von Overfitting durch EarlyStopping, L2-Regularisierung und Data Augmentation.
+
+📌 Ausblick:
+------------
+Weitere Optimierungen könnten sich auf folgende Bereiche beziehen:
+- **Erweiterte Augmentation** (z. B. Color Jitter, Helligkeit, Noise)
+- **Andere Basismodelle** (EfficientNet, InceptionV3 etc.)
+- **Multi-Metrik-Training** (kombinierter Verlust aus z. B. F1 und BCE)
+- **Ensemble-Strategien** oder Model Averaging für die finale Klassifikation

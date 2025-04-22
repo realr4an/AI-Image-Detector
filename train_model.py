@@ -37,8 +37,8 @@ def train_model():
     # Hyperparameter
     img_width, img_height = 224, 224
     batch_size = 64
-    initial_epochs = 10
-    fine_tune_epochs = 10
+    initial_epochs = 20
+    fine_tune_epochs = 20
 
     # Verzeichnispfade
     train_data_dir = 'Dataset/train'
@@ -110,7 +110,7 @@ def train_model():
     )
 
     # Fine-Tuning: letzte ResNet-Schichten freigeben
-    for layer in base_model.layers[-10:]:
+    for layer in base_model.layers[-50:]:
         layer.trainable = True
 
     model.compile(optimizer=tf.keras.optimizers.Adam(1e-5), loss='binary_crossentropy', metrics=['accuracy'])

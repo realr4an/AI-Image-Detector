@@ -7,7 +7,7 @@ from tensorflow.keras.applications.resnet50 import preprocess_input  # Import hi
 # Verwende st.cache_resource, um das Modell zu laden und zwischenzuspeichern.
 @st.cache_resource
 def load_model():
-    model = tf.keras.models.load_model("best_model.h5")
+    model = tf.keras.models.load_model("best_model_finetuned.h5")
     return model
 
 model = load_model()
