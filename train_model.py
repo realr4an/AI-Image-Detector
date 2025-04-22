@@ -80,8 +80,8 @@ def train_model():
     model = Sequential([
         base_model,
         GlobalAveragePooling2D(),
-        Dense(128, activation='relu', kernel_regularizer=l2(0.001)),
-        Dropout(0.5),
+        Dense(128, activation='relu', kernel_regularizer=l2(0.002)),
+        Dropout(0.6),
         Dense(1, activation='sigmoid', dtype='float32')
     ])
 
@@ -94,7 +94,7 @@ def train_model():
     # Callbacks für erstes Training
     early_stopping = EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True)
     model_checkpoint = ModelCheckpoint('best_model_initial.h5', save_best_only=True, monitor='val_accuracy')
-    reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=3)
+    reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.2, patience=2, min_lr=1e-7)
     callbacks_initial = [early_stopping, model_checkpoint, reduce_lr, tensorboard_callback]
 
     # Erstes Training
@@ -110,10 +110,10 @@ def train_model():
     )
 
     # Fine-Tuning: letzte ResNet-Schichten freigeben
-    for layer in base_model.layers[-50:]:
+    for layer in base_model.layers[-10:]:
         layer.trainable = True
 
-    model.compile(optimizer=tf.keras.optimizers.Adam(1e-5), loss='binary_crossentropy', metrics=['accuracy'])
+    model.compile(optimizer=tf.keras.optimizers.Adam(1e-6), loss='binary_crossentropy', metrics=['accuracy', tf.keras.metrics.AUC(name="auc")])
 
     model_checkpoint_fine = ModelCheckpoint('best_model_finetuned.h5', save_best_only=True, monitor='val_accuracy')
     callbacks_finetune = [early_stopping, model_checkpoint_fine, reduce_lr, tensorboard_callback]
@@ -140,8 +140,8 @@ def train_model():
             shuffle=False
         )
 
-        test_loss, test_accuracy = model.evaluate(test_generator)
-        print(f"Test Loss: {test_loss:.4f}, Test Accuracy: {test_accuracy:.4f}")
+        test_loss, test_accuracy, test_auc = model.evaluate(test_generator)
+        print(f"Test Loss: {test_loss:.4f}, Test Accuracy: {test_accuracy:.4f}, Test AUC: {test_auc:.4f}")
 
         y_pred = model.predict(test_generator)
         y_pred_classes = (y_pred > 0.5).astype(int)

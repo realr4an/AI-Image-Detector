@@ -110,3 +110,111 @@ Weitere Optimierungen könnten sich auf folgende Bereiche beziehen:
 - **Andere Basismodelle** (EfficientNet, InceptionV3 etc.)
 - **Multi-Metrik-Training** (kombinierter Verlust aus z. B. F1 und BCE)
 - **Ensemble-Strategien** oder Model Averaging für die finale Klassifikation
+
+📅 NEUER STAND: 20.04.2025 – Feintuning-Optimierung & Metrik-Fokus
+-------------------------------------------------------------------
+Zusätzlich zur Erhöhung der Epochen und der Erweiterung der Fine-Tuning-Tiefe wurden weitere gezielte Anpassungen vorgenommen, um insbesondere **Recall** und **F1-Score** zu verbessern:
+
+1. **Feinere Lernratenanpassung im Fine-Tuning**:
+   - Die Lernrate wurde von `1e-5` auf **`1e-6`** reduziert.
+   - Ziel: feinfühligere Anpassung der trainierten ResNet-Schichten ohne Überanpassung.
+
+2. **Stärkere Regularisierung gegen Overfitting**:
+   - `Dropout`-Rate wurde von **0.5 auf 0.6** erhöht.
+   - Die L2-Regularisierung im Dense-Layer wurde verstärkt: `l2(0.001)` → `l2(0.002)`.
+
+3. **Dynamischere Lernratenanpassung mit ReduceLROnPlateau**:
+   - `factor` wurde auf **0.2** reduziert, `patience` auf **2**.
+   - Zusätzlich wurde eine `min_lr` von **`1e-7`** definiert, um übermäßige Reduktion zu vermeiden.
+
+4. **Erweiterung der Metriken: AUC (Area Under Curve)**:
+   - Neben Accuracy wird nun auch der **AUC-Wert** getrackt (`tf.keras.metrics.AUC()`).
+   - Dieser zeigt, wie gut das Modell unabhängig vom Schwellenwert zwischen den Klassen unterscheidet – gerade bei ähnlichen Klassen sehr wertvoll.
+
+5. **Erweiterbarer Fine-Tuning-Bereich (optional)**:
+   - Standardmäßig werden die letzten **50 Layer** freigegeben.
+   - Optional kann diese Zahl auf **100 oder mehr** erweitert werden, je nach Overfitting-Tendenz und Trainingsdauer.
+
+📌 Ziel dieser Änderungen:
+--------------------------
+- **Fokussierter Recall-Zuwachs**, ohne Precision zu verlieren.
+- **Robustere Generalisierung** auf schwierige Fake/Real-Unterschiede.
+- **Bessere Kontrolle** über den Trainingseinfluss durch fein abgestimmte Lernraten- und Regularisierungsmechanismen.
+
+⏭️ Nächste Schritte:
+----------------------
+- Vergleich der neuen Trainingskurven in TensorBoard (Accuracy, Loss, AUC).
+- Test auf bisher ungenutzten Datensätzen (Cross-Validation oder Challenge-Sets).
+- Integration eines Threshold-Tunings zur gezielten Optimierung der F1-Score.
+
+📅 NEUER STAND: 22.04.2025 – Tieferes Fine-Tuning & AUC-Tracking
+-----------------------------------------------------------------
+Im aktuellen Durchlauf wurde das Modell mit einem nochmals erweiterten Setup trainiert:
+
+1. **Fine-Tuning von 100 ResNet50-Schichten**:
+   - Ziel war es, dem Modell mehr Lernkapazität für feine Unterschiede zwischen Real und Fake zu geben.
+   - Trotz guter Trainings- und Validierungswerte zeigte das Testset jedoch eine **Verschlechterung der Generalisierung**.
+
+2. **AUC-Metrik eingeführt**:
+   - Das Modell loggt nun zusätzlich die **Area Under Curve (AUC)** zur besseren Bewertung der Klassentrennung.
+   - Im Test lag der AUC bei **0.7244**, was moderat, aber noch ausbaufähig ist.
+
+3. **Stabilisierung der Lernrate**:
+   - Der Trainingsverlauf war konstant mit Lernratenanpassung (`ReduceLROnPlateau`) und feiner Nachregelung (`min_lr=1e-7`).
+
+📉 Fazit:
+---------
+- Obwohl das Fine-Tuning tiefer ging, **verschlechterten sich Recall und F1-Score** auf dem Testset.
+- Das Modell war im Validierungsset stark, aber **leicht überangepasst** und **weniger robust im echten Test**.
+
+🔁 Foregehen für den nächsten Trainingsversuch:
+---------------------------------------------------
+
+1. **Fine-Tuning reduzieren** (z. B. nur -30 Layer):
+   - Zu viel Fine-Tuning kann das vortrainierte Wissen überschreiben.
+   - Ziel: bessere Balance zwischen Anpassung und Generalisierung.
+
+2. **Threshold-Tuning aktivieren**:
+   - Standardmäßig wird bei `0.5` klassifiziert.
+   - Ein dynamischer Schwellenwert (z. B. 0.4 oder 0.45) könnte den **Recall verbessern**, ohne die Precision drastisch zu senken.
+
+3. **Neues Basismodell ausprobieren (EfficientNetB0)**:
+   - EfficientNetB0 ist kleiner, effizienter und oft robuster bei feinen visuellen Unterschieden.
+   - Lässt sich 1:1 gegen ResNet50 austauschen im aktuellen Code.
+
+
+
+📊 MODELLERGEBNISSE (TESTSET)
+=============================
+
+📅 Ergebnisse vom 14.04.2025
+----------------------------
+
+| Modellname               | Accuracy | Precision | Recall | F1-Score | AUC  | Epochen (init/ft) | Fine-Tune-Layer |
+|--------------------------|----------|-----------|--------|----------|------|-------------------|-----------------|
+| best_model_initial.h5    | 0.7051   | 0.7710    | 0.6053 | 0.6782   | –    | 10 / –            | 0               |
+| best_model_finetuned.h5  | 0.7026   | 0.7706    | 0.5990 | 0.6741   | –    | 10 / 10           | 10              |
+| model_final.h5 (v1)      | 0.7026   | 0.7706    | 0.5990 | 0.6741   | –    | 10 / 10           | 10              |
+
+📅 Ergebnisse vom 20.04.2025
+----------------------------
+
+| Modellname               | Accuracy | Precision | Recall | F1-Score | AUC  | Epochen (init/ft) | Fine-Tune-Layer |
+|--------------------------|----------|-----------|--------|----------|------|-------------------|-----------------|
+| best_model_initial.h5*   | 0.7030   | 0.7866    | 0.5785 | 0.6667   | –    | 20 / –            | 0               |
+| best_model_finetuned.h5* | 0.6914   | 0.7762    | 0.5608 | 0.6511   | –    | 20 / 20           | 50              |
+| model_final.h5 (v2)      | 0.6914   | 0.7762    | 0.5608 | 0.6511   | –    | 20 / 20           | 50              |
+
+📅 Ergebnisse vom 22.04.2025
+----------------------------
+
+| Modellname               | Accuracy | Precision | Recall | F1-Score | AUC   | Epochen (init/ft) | Fine-Tune-Layer |
+|--------------------------|----------|-----------|--------|----------|-------|-------------------|-----------------|
+| best_model_initial.h5**  | 0.7048   | 0.7678    | 0.6094 | 0.6795   | –     | 20 / –            | 0               |
+| best_model_finetuned.h5**| 0.6669   | 0.7640    | 0.5082 | 0.6104   | –     | 20 / 20           | 100             |
+| model_final.h5 (v3)      | 0.6654   | 0.7658    | 0.5017 | 0.6063   | 0.7244| 20 / 20           | 100             |
+
+
+
+> *AUC wird künftig geloggt, sobald im Training integriert.  
+> ft = Fine-Tuning
