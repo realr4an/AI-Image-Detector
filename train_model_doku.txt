@@ -182,6 +182,10 @@ Im aktuellen Durchlauf wurde das Modell mit einem nochmals erweiterten Setup tra
    - EfficientNetB0 ist kleiner, effizienter und oft robuster bei feinen visuellen Unterschieden.
    - Lässt sich 1:1 gegen ResNet50 austauschen im aktuellen Code.
 
+📅 NEUER STAND: 24.04.2025 – Tieferes Fine-Tuning & AUC-Tracking
+
+- Fine-Tuning reduziert auf -10 wieer
+
 
 
 📊 MODELLERGEBNISSE (TESTSET)
@@ -213,6 +217,15 @@ Im aktuellen Durchlauf wurde das Modell mit einem nochmals erweiterten Setup tra
 | best_model_initial.h5**  | 0.7048   | 0.7678    | 0.6094 | 0.6795   | –     | 20 / –            | 0               |
 | best_model_finetuned.h5**| 0.6669   | 0.7640    | 0.5082 | 0.6104   | –     | 20 / 20           | 100             |
 | model_final.h5 (v3)      | 0.6654   | 0.7658    | 0.5017 | 0.6063   | 0.7244| 20 / 20           | 100             |
+
+📅 Ergebnisse vom 24.04.2025
+----------------------------
+
+| Modellname                | Accuracy | Precision | Recall | F1-Score | AUC  | Epochen (init/ft) | Fine-Tune-Layer |
+|---------------------------|----------|-----------|--------|----------|------|-------------------|-----------------|
+| best_model_initial.h5***  | 0.7025   | 0.7682    | 0.6022 | 0.6752   | –    | 20 / –            | 0               |
+| best_model_finetuned.h5***| 0.7027   | 0.7614    | 0.6131 | 0.6793   | –    | 20 / 20           | 10              |
+| model_final.h5 (v4)       | 0.7027   | 0.7614    | 0.6131 | 0.6793   | –    | 20 / 20           | 10              |
 
 
 
