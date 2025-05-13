@@ -1,0 +1,9 @@
+resize auf 256
+
+
+Augemntation raus nehmen
+
+lr patience hoch setzen = 10
+
+
+finetuning raus nehmen

@@ -1,0 +1,173 @@
+PS C:\Users\1\Documents\GitHub\AI-Image-Detector> & c:/Users/1/Documents/GitHub/AI-Image-Detector/.venv/Scripts/python.exe c:/Users/1/Documents/GitHub/AI-Image-Detector/train_model_new.py
+Gefundene GPU(s): [PhysicalDevice(name='/physical_device:GPU:0', device_type='GPU')]
+Found 141070 images belonging to 2 classes.
+Found 40496 images belonging to 2 classes.
+2025-05-09 00:46:26.499250: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX AVX2
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2025-05-09 00:46:26.613224: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1616] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 6073 MB memory:  -> device: 0, name: NVIDIA GeForce RTX 2070 SUPER, pci bus id: 0000:01:00.0, compute capability: 7.5
+Epoch 1/50
+2025-05-09 00:46:38.907063: I tensorflow/stream_executor/cuda/cuda_dnn.cc:384] Loaded cuDNN version 8600
+2204/2204 [==============================] - 848s 375ms/step - loss: 0.1596 - accuracy: 0.9539 - val_loss: 0.3518 - val_accuracy: 0.8810 - lr: 0.0010
+Epoch 2/50
+2204/2204 [==============================] - 850s 386ms/step - loss: 0.0757 - accuracy: 0.9730 - val_loss: 0.1432 - val_accuracy: 0.9451 - lr: 0.0010
+Epoch 3/50
+2204/2204 [==============================] - 848s 385ms/step - loss: 0.0640 - accuracy: 0.9774 - val_loss: 0.1703 - val_accuracy: 0.9281 - lr: 0.0010
+Epoch 4/50
+2204/2204 [==============================] - 850s 385ms/step - loss: 0.0561 - accuracy: 0.9802 - val_loss: 0.2296 - val_accuracy: 0.9074 - lr: 0.0010
+Epoch 5/50
+2204/2204 [==============================] - 851s 386ms/step - loss: 0.0502 - accuracy: 0.9824 - val_loss: 0.1428 - val_accuracy: 0.9465 - lr: 0.0010
+Epoch 6/50
+2204/2204 [==============================] - 847s 384ms/step - loss: 0.0462 - accuracy: 0.9841 - val_loss: 0.1947 - val_accuracy: 0.9339 - lr: 0.0010
+Epoch 7/50
+2204/2204 [==============================] - 850s 385ms/step - loss: 0.0397 - accuracy: 0.9859 - val_loss: 0.0931 - val_accuracy: 0.9683 - lr: 0.0010
+Epoch 8/50
+2204/2204 [==============================] - 848s 385ms/step - loss: 0.0360 - accuracy: 0.9878 - val_loss: 0.1109 - val_accuracy: 0.9680 - lr: 0.0010
+Epoch 9/50
+2204/2204 [==============================] - 850s 386ms/step - loss: 0.0334 - accuracy: 0.9885 - val_loss: 0.1644 - val_accuracy: 0.9514 - lr: 0.0010
+Epoch 10/50
+2204/2204 [==============================] - 849s 385ms/step - loss: 0.0312 - accuracy: 0.9898 - val_loss: 0.1071 - val_accuracy: 0.9650 - lr: 0.0010
+Epoch 11/50
+2204/2204 [==============================] - 849s 385ms/step - loss: 0.0279 - accuracy: 0.9908 - val_loss: 0.1050 - val_accuracy: 0.9673 - lr: 0.0010
+Epoch 12/50
+2204/2204 [==============================] - 852s 386ms/step - loss: 0.0261 - accuracy: 0.9915 - val_loss: 0.1087 - val_accuracy: 0.9697 - lr: 0.0010
+Epoch 13/50
+2204/2204 [==============================] - 849s 385ms/step - loss: 0.0246 - accuracy: 0.9922 - val_loss: 0.1088 - val_accuracy: 0.9682 - lr: 0.0010
+Epoch 14/50
+2204/2204 [==============================] - 849s 385ms/step - loss: 0.0228 - accuracy: 0.9929 - val_loss: 0.1019 - val_accuracy: 0.9719 - lr: 0.0010
+Epoch 15/50
+2204/2204 [==============================] - 848s 385ms/step - loss: 0.0220 - accuracy: 0.9933 - val_loss: 0.1774 - val_accuracy: 0.9456 - lr: 0.0010
+Epoch 16/50
+2204/2204 [==============================] - 849s 385ms/step - loss: 0.0196 - accuracy: 0.9942 - val_loss: 0.1007 - val_accuracy: 0.9694 - lr: 0.0010
+Epoch 17/50
+2204/2204 [==============================] - 850s 386ms/step - loss: 0.0191 - accuracy: 0.9941 - val_loss: 0.1309 - val_accuracy: 0.9673 - lr: 0.0010
+Epoch 18/50
+2204/2204 [==============================] - 851s 386ms/step - loss: 0.0090 - accuracy: 0.9973 - val_loss: 0.0866 - val_accuracy: 0.9794 - lr: 2.0000e-04
+Epoch 19/50
+2204/2204 [==============================] - 848s 385ms/step - loss: 0.0059 - accuracy: 0.9984 - val_loss: 0.0947 - val_accuracy: 0.9782 - lr: 2.0000e-04
+Epoch 20/50
+2204/2204 [==============================] - 849s 385ms/step - loss: 0.0057 - accuracy: 0.9985 - val_loss: 0.1038 - val_accuracy: 0.9780 - lr: 2.0000e-04
+Epoch 21/50
+2204/2204 [==============================] - 851s 386ms/step - loss: 0.0049 - accuracy: 0.9987 - val_loss: 0.1024 - val_accuracy: 0.9798 - lr: 2.0000e-04
+Epoch 22/50
+2204/2204 [==============================] - 849s 385ms/step - loss: 0.0045 - accuracy: 0.9987 - val_loss: 0.1474 - val_accuracy: 0.9757 - lr: 2.0000e-04
+Epoch 23/50
+2204/2204 [==============================] - 849s 385ms/step - loss: 0.0042 - accuracy: 0.9988 - val_loss: 0.1083 - val_accuracy: 0.9787 - lr: 2.0000e-04
+====] - 849s 385ms/step - loss: 0.0031 - accuracy: 0.9993 - val_loss: 0.14====] - 851s 386ms/step - loss: 0.0036 - accuracy: 0.9991 - val_loss: 0.1141 - val_accuracy: 0.9788 - lr: 2.0000e-0463 - val_accuracy: 0.9772 - lr: 2.0000e-04
+Epoch 27/50
+2204/2204 [==============================] - 857s 389ms/step - loss: 0.0028 - accuracy: 0.9994 - val_loss: 0.1509 - val_accuracy: 0.9761 - lr: 2.0000e-04y: 0.9995   
+Epoch 28/50
+2204/2204 [==============================] - 871s 395ms/step - loss: 0.0025 - accuracy: 0.9995 - val_loss: 0.1231 - val_accuracy: 0.9793 - lr: 2.0000e-04
+Epoch 29/50
+2204/2204 [==============================] - 871s 395ms/step - loss: 0.0014 - accuracy: 0.9998 - val_loss: 0.1283 - val_accuracy: 0.9795 - lr: 4.0000e-05
+Epoch 30/50
+2204/2204 [==============================] - 866s 393ms/step - loss: 0.0011 - accuracy: 0.9999 - val_loss: 0.1338 - val_accuracy: 0.9799 - lr: 4.0000e-05
+Epoch 31/50
+2204/2204 [==============================] - 870s 395ms/step - loss: 9.8639e-04 - accuracy: 0.9999 - val_loss: 0.1336 - val_accuracy: 0.9796 - lr: 4.0000e-05
+Epoch 32/50
+2204/2204 [==============================] - 850s 386ms/step - loss: 8.1309e-04 - accuracy: 1.0000 - val_loss: 0.1442 - val_accuracy: 0.9797 - lr: 4.0000e-05
+Epoch 33/50
+2204/2204 [==============================] - 845s 383ms/step - loss: 8.2389e-04 - accuracy: 1.0000 - val_loss: 0.1389 - val_accuracy: 0.9798 - lr: 4.0000e-05
+Epoch 34/50
+2204/2204 [==============================] - 842s 382ms/step - loss: 7.7327e-04 - accuracy: 1.0000 - val_loss: 0.1572 - val_accuracy: 0.9787 - lr: 4.0000e-05
+Epoch 35/50
+2204/2204 [==============================] - 843s 382ms/step - loss: 7.0156e-04 - accuracy: 1.0000 - val_loss: 0.1514 - val_accuracy: 0.9792 - lr: 4.0000e-05
+Epoch 36/50
+2204/2204 [==============================] - 845s 383ms/step - loss: 7.0076e-04 - accuracy: 1.0000 - val_loss: 0.1442 - val_accuracy: 0.9800 - lr: 4.0000e-05
+Epoch 37/50
+2204/2204 [==============================] - 846s 384ms/step - loss: 6.9002e-04 - accuracy: 1.0000 - val_loss: 0.1588 - val_accuracy: 0.9789 - lr: 4.0000e-05
+Epoch 38/50
+2204/2204 [==============================] - 845s 383ms/step - loss: 6.2773e-04 - accuracy: 1.0000 - val_loss: 0.1519 - val_accuracy: 0.9794 - lr: 4.0000e-05
+Epoch 39/50
+2204/2204 [==============================] - 844s 383ms/step - loss: 5.9857e-04 - accuracy: 1.0000 - val_loss: 0.1563 - val_accuracy: 0.9796 - lr: 8.0000e-06
+Epoch 40/50
+2204/2204 [==============================] - 845s 383ms/step - loss: 5.6103e-04 - accuracy: 1.0000 - val_loss: 0.1587 - val_accuracy: 0.9797 - lr: 8.0000e-06
+Epoch 41/50
+2204/2204 [==============================] - 848s 384ms/step - loss: 5.6466e-04 - accuracy: 1.0000 - val_loss: 0.1587 - val_accuracy: 0.9797 - lr: 8.0000e-06
+Epoch 42/50
+2204/2204 [==============================] - 847s 384ms/step - loss: 5.4152e-04 - accuracy: 1.0000 - val_loss: 0.1596 - val_accuracy: 0.9794 - lr: 8.0000e-06
+Epoch 43/50
+2204/2204 [==============================] - 853s 387ms/step - loss: 5.1983e-04 - accuracy: 1.0000 - val_loss: 0.1641 - val_accuracy: 0.9794 - lr: 8.0000e-06
+Epoch 44/50
+2204/2204 [==============================] - 849s 385ms/step - loss: 5.3867e-04 - accuracy: 1.0000 - val_loss: 0.1598 - val_accuracy: 0.9795 - lr: 8.0000e-06
+Epoch 45/50
+2204/2204 [==============================] - 850s 385ms/step - loss: 5.1695e-04 - accuracy: 1.0000 - val_loss: 0.1612 - val_accuracy: 0.9794 - lr: 8.0000e-06
+Epoch 46/50
+2204/2204 [==============================] - 848s 385ms/step - loss: 5.2568e-04 - accuracy: 1.0000 - val_loss: 0.1603 - val_accuracy: 0.9795 - lr: 8.0000e-06
+Epoch 47/50
+2204/2204 [==============================] - 849s 385ms/step - loss: 4.9754e-04 - accuracy: 1.0000 - val_loss: 0.1574 - val_accuracy: 0.9796 - lr: 8.0000e-06
+Epoch 48/50
+2204/2204 [==============================] - 850s 386ms/step - loss: 5.0596e-04 - accuracy: 1.0000 - val_loss: 0.1668 - val_accuracy: 0.9794 - lr: 8.0000e-06
+Epoch 49/50
+2204/2204 [==============================] - 851s 386ms/step - loss: 5.1719e-04 - accuracy: 1.0000 - val_loss: 0.1615 - val_accuracy: 0.9794 - lr: 1.6000e-06
+Epoch 50/50
+2204/2204 [==============================] - 850s 385ms/step - loss: 5.2830e-04 - accuracy: 1.0000 - val_loss: 0.1631 - val_accuracy: 0.9794 - lr: 1.6000e-06
+Found 11972 images belonging to 2 classes.
+188/188 [==============================] - 26s 139ms/step - loss: 1.0268 - accuracy: 0.8888
+188/188 [==============================] - 21s 108ms/step
+
+Klassifikationsreport:
+              precision    recall  f1-score   support
+
+           0       0.83      0.97      0.89      5825
+           1       0.96      0.81      0.88      6147
+
+    accuracy                           0.89     11972
+   macro avg       0.90      0.89      0.89     11972
+
+Konfusionsmatrix:
+[[5643  182]
+ [1149 4998]]
+Das Modell wurde erfolgreich als 'model_final.h5' gespeichert.
+PS C:\Users\1\Documents\GitHub\AI-Image-Detector> & c:/Users/1/Documents/GitHub/AI-Image-Detector/.venv/Scripts/python.exe c:/Users/1/Documents/GitHub/AI-Image-Detector/alternative_app.py
+2025-05-09 13:35:12.991
+  Warning: to view this Streamlit app on a browser, run it with the following
+  command:
+
+    streamlit run c:/Users/1/Documents/GitHub/AI-Image-Detector/alternative_app.py [ARGUMENTS]
+2025-05-09 13:35:13.525650: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX AVX2
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2025-05-09 13:35:13.643577: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1616] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 6073 MB memory:  -> device: 0, name: NVIDIA GeForce RTX 2070 SUPER, pci bus id: 0000:01:00.0, compute capability: 7.5
+PS C:\Users\1\Documents\GitHub\AI-Image-Detector> streamlit run .\alternative_app.py
+  You can now view your Streamlit app in your browser.
+
+  Network URL: http://192.168.178.43:8501
+
+2025-05-09 13:36:02.983857: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX AVX2
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2025-05-09 13:36:03.401655: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1616] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 6073 MB memory:  -> device: 0, name: NVIDIA GeForce RTX 2070 SUPER, pci bus id: 0000:01:00.0, compute capability: 7.5
+2025-05-09 13:36:25.683246: I tensorflow/stream_executor/cuda/cuda_dnn.cc:384] Loaded cuDNN version 8600
+1/1 [==============================] - 4s 4s/step
+1/1 [==============================] - 0s 472ms/step
+1/1 [==============================] - 1s 570ms/step
+1/1 [==============================] - 0s 458ms/step
+1/1 [==============================] - 0s 341ms/step
+  Stopping...
+PS C:\Users\1\Documents\GitHub\AI-Image-Detector> tensorboard --logdir logs/fit
+Serving TensorBoard on localhost; to expose to the network, use a proxy or pass --bind_all
+TensorBoard 2.10.1 at http://localhost:6006/ (Press CTRL+C to quit)
+PS C:\Users\1\Documents\GitHub\AI-Image-Detector> python .\evaluate_models.py
+
+🔍 Evaluating model: best_model_initial.h5
+2025-05-09 13:42:20.586019: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX AVX2
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2025-05-09 13:42:20.711994: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1616] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 6073 MB memory:  -> device: 0, name: NVIDIA GeForce RTX 2070 SUPER, pci bus id: 0000:01:00.0, compute capability: 7.5
+Lade Bilder aus Dataset/Test/Fake: 100%|████████████████████████████████████████████████████████████████████████████████████| 5825/5825 [00:05<00:00, 1108.35Bild/s]
+Lade Bilder aus Dataset/Test/Real: 100%|████████████████████████████████████████████████████████████████████████████████████| 6147/6147 [00:05<00:00, 1131.39Bild/s]
+🔄 Vorhersagen werden berechnet...
+Model Predictions:   0%|                                                                                                                | 0/11972 [00:00<?, ?Bild/s]2025-05-09 13:42:38.859385: I tensorflow/stream_executor/cuda/cuda_dnn.cc:384] Loaded cuDNN version 8600
+Model Predictions: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████| 11972/11972 [11:28<00:00, 17.39Bild/s]
+📊 Accuracy : 0.8895
+📊 Precision: 0.9667
+📊 Recall   : 0.8128
+📊 F1-Score : 0.8831
+
+🔍 Evaluating model: model_final.h5
+Lade Bilder aus Dataset/Test/Fake: 100%|█████████████████████████████████████████████████████████████████████████████████████| 5825/5825 [00:19<00:00, 300.49Bild/s]
+Lade Bilder aus Dataset/Test/Real: 100%|█████████████████████████████████████████████████████████████████████████████████████| 6147/6147 [00:18<00:00, 331.97Bild/s]
+🔄 Vorhersagen werden berechnet...
+Model Predictions: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████| 11972/11972 [13:06<00:00, 15.23Bild/s]
+📊 Accuracy : 0.8889
+📊 Precision: 0.9649
+📊 Recall   : 0.8132
+📊 F1-Score : 0.8826
+PS C:\Users\1\Documents\GitHub\AI-Image-Detector> 

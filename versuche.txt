@@ -1,0 +1,25 @@
+ResNet50 durch EfficientNetB0 ersetzt
+
+Sequential()-Modell durch die Functional API ersetzt
+
+base_model.trainable = False gesetzt für initiales Training
+
+Nur die letzten Schichten des Base-Modells für Fine-Tuning freigegeben
+
+Mixed Precision (mixed_float16) aktiviert, um die GPU besser zu nutzen
+
+ReduceLROnPlateau auskommentiert, da es zu JSON-Fehlern führte
+
+TensorBoard eingerichtet und verwendet (Logging-Verzeichnis korrekt konfiguriert)
+
+histogram_freq=1 im TensorBoard-Callback entfernt, um Speicherprobleme zu vermeiden
+
+Fehler mehrfach erhalten: Unable to serialize [...] to JSON. Unrecognized type <EagerTensor>
+
+Festgestellt, dass der Fehler durch mixed_precision in Kombination mit Keras-Callbacks entsteht
+
+Trainingslogik klar strukturiert in zwei Phasen (Initialtraining + Fine-Tuning)
+
+ModelCheckpoint, EarlyStopping und TensorBoard als Callbacks eingesetzt
+
+Mehrere Anläufe mit verschiedenen Kombinationen unternommen (mit/ohne Callbacks, Mixed Precision etc.)

@@ -37,6 +37,8 @@ def train_model():
     import numpy as np
     from sklearn.metrics import classification_report, confusion_matrix
     import datetime
+    from tensorflow.keras import Input, Model
+
 
     img_width, img_height = 224, 224
     batch_size = 64
@@ -78,23 +80,32 @@ def train_model():
 
     base_model.trainable = False
 
-    model = Sequential([
-        base_model,
-        GlobalAveragePooling2D(),
-        Dense(128, activation='relu', kernel_regularizer=l2(0.002)),
-        Dropout(0.6),
-        Dense(1, activation='sigmoid', dtype='float32')
-    ])
+    # model = Sequential([
+    #     base_model,
+    #     GlobalAveragePooling2D(),
+    #     Dense(128, activation='relu', kernel_regularizer=l2(0.002)),
+    #     Dropout(0.6),
+    #     Dense(1, activation='sigmoid', dtype='float32')
+    # ])
+
+    inputs = Input(shape=(img_width, img_height, 3))
+    x = base_model(inputs, training=False)  # wichtig!
+    x = GlobalAveragePooling2D()(x)
+    x = Dense(128, activation='relu', kernel_regularizer=l2(0.002))(x)
+    x = Dropout(0.6)(x)
+    outputs = Dense(1, activation='sigmoid', dtype='float32')(x)
+
+    model = Model(inputs, outputs)
 
     model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
     log_dir = os.path.join("logs", "fit", datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
-    tensorboard_callback = TensorBoard(log_dir=log_dir, histogram_freq=1)
+    tensorboard_callback = TensorBoard(log_dir=log_dir)
 
     early_stopping = EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True)
     model_checkpoint = ModelCheckpoint('best_model_initial.h5', save_best_only=True, monitor='val_accuracy')
-    reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.2, patience=2, min_lr=1e-7)
-    callbacks_initial = [early_stopping, model_checkpoint, reduce_lr, tensorboard_callback]
+    reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.2, patience=2, min_lr=float(1e-7))
+    callbacks_initial = [early_stopping, model_checkpoint, tensorboard_callback]
 
     history_initial = model.fit(
         train_generator,
@@ -113,7 +124,7 @@ def train_model():
     model.compile(optimizer=tf.keras.optimizers.Adam(1e-6), loss='binary_crossentropy', metrics=['accuracy', tf.keras.metrics.AUC(name="auc")])
 
     model_checkpoint_fine = ModelCheckpoint('best_model_finetuned.h5', save_best_only=True, monitor='val_accuracy')
-    callbacks_finetune = [early_stopping, model_checkpoint_fine, reduce_lr, tensorboard_callback]
+    callbacks_finetune = [early_stopping, model_checkpoint_fine, tensorboard_callback]
 
     history_fine = model.fit(
         train_generator,

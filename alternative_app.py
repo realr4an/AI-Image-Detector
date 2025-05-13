@@ -7,7 +7,7 @@ from tensorflow.keras.applications.resnet50 import preprocess_input  # Import hi
 # Verwende st.cache_resource, um das Modell zu laden und zwischenzuspeichern.
 @st.cache_resource
 def load_model():
-    model = tf.keras.models.load_model("best_model_finetuned.h5")
+    model = tf.keras.models.load_model("best_model_initial.h5")
     return model
 
 model = load_model()
@@ -19,7 +19,7 @@ if len(input_shape) == 4:
 else:
     st.error("Das Modell hat eine unerwartete Eingabeform!")
     # Fallback-Werte, falls nötig
-    height, width = 224, 224
+    height, width = 256, 256
 
 st.title("Deep Fake Erkennung")
 st.write("Laden Sie ein Bild hoch, um zu prüfen, ob es sich um einen Deep Fake handelt.")

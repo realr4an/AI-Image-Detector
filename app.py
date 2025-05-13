@@ -15,10 +15,10 @@ def load_cnn_model():
     Lädt das vortrainierte CNN-Modell (Dateiname: best_model.h5).
     Achte darauf, dass das Modell im selben Verzeichnis liegt oder passe den Pfad an.
     """
-    model = load_model("best_model.h5")
+    model = load_model("model_final.h5")
     return model
 
-def preprocess_image(img, target_size=(224, 224)):
+def preprocess_image(img, target_size=(256, 256)):
     """
     Passt das hochgeladene Bild an die benötigte Eingabegröße an und preprocessiert es mit preprocess_input.
     """
