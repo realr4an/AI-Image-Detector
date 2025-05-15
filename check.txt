@@ -1,0 +1,6 @@
+- MobilNetV2
+- Pipeline mit face extraction
+- Dataset erweitern
+
+- Batchsize hoch setzen um Grafik karte auszulasten
+- bei den Testdaten Bilder ausgeben bei den Falsch Klassifiziert wird
