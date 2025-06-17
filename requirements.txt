@@ -3,3 +3,4 @@ numpy == 1.23.5
 tensorflow==2.10
 opencv-python
 scipy
+huggingface_hub

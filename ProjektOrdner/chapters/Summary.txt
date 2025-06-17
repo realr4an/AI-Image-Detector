@@ -1,0 +1,20 @@
+05_Datensätze
+- 3 Datensätze von Kaggle:
+    - Deepfake-vs-Real-Classification
+        - Fake und  Real Bilder jeweils ca. 28.6K Bilder
+    - Detect AI-Generated Faces: High-Quality Dataset
+        - Fake (1001) und Real (2002) Bilder
+    - deepfake and real images 
+        - Fake (ca 95.092) und Real (ca. 95.213) Bilder
+
+Vorverarbeitung im Code
+- Die daten wurden aufgeteilt in Ordner (train, test, validation) und in die Unterordner fake und real
+- es wird ImageDataGenerator mit preprocess_input verwendet
+    - Die Bilder werden vorverarbeitet mit resize auf 256x256
+    - Normalisiert Pixelwerte entsprechend der ResNet50-Konvention
+    - Keine weitere Augmentation oder künstliche Veränderungen.
+- Die bilder werdne in einer Batchgröße von 64 vorverarbeitet
+- Die Bilder werden als binär labels geladen (fake und real)
+
+
+06_Methodik

@@ -1,0 +1,111 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2820
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;\red25\green25\blue25;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;\cssrgb\c12941\c12941\c12941;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww27240\viewh20180\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs80 \cf0 Ich habe zuerst angefangen mich zu informieren welche Daten ich denn \'fcberhaupt benutzen kann und wie ich meinen usecase f\'fcr die Projektarbeit orientiere. Da ich gerne mit Bildern arbeiten wollte und weniger mit video habe ich daher meinen ersten Datensatz auf Kaggle gefunden welcher soweit ganz gut aus sah. Der erste Datensatz dabei war
+\fs28  
+\fs80 \'84\expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 deepfake and real images\'93 (https://www.kaggle.com/datasets/manjilkarki/deepfake-and-real-images). Dieser beinhaltete 190.000 Bilder in einer gro\'dfe von 256x256 in jpg Format, welche aufgeteilt wurde in Test(10905), Training(140.000) und Validation(39.400) Daten. Zum ersten Training wurde nun ResNet50 mit tortrainierten Image_Net Gewichten. Die ResNet50-Layer wurde dabei eingefroren und wurde nicht weiter verfeinert. Dazu gab es noch folgende Einstellungen \outl0\strokewidth0 Flatten \uc0\u8594  Dense(128, relu) \u8594  Dropout(0.5) \u8594  Dense(1, sigmoid), Optimierung mit Adam, Loss: Binary Crossentropy, Verwendung von Mixed Precision Training (float16), Data Augmentation im Training (Rotation, Flip, Zoom, etc.). Um die ganze Trainingszeit ein wenig zu optimieren habe ich noch folgende Callbackfunktionen eingebaut: EarlyStopping, ModelCheckpoint und ReduceLROnPlateau. Dazu habe ich immer das beste Modell als `best_model.h5` gespeichert und das finale Modell als `model.h5`. Da diese Ergebnisse sehr unzifiredenstellend waren und das ganze Modell quasi per Zufall das ganze entscheidet ob nun ein Bild fake ist oder nicht gab es folgende Ver\'e4nderungen. Das Flatten() wurde ausgetauscht durch GlobalAveragePooling2D() f\'fcr eine bessere Generalisierung und Dense(128) wurde ge\'e4ndert durch \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 L2-Regularisierung (`l2(0.001)`). Dazu wurde nun noch ein FineTuning implementiert welches die Lernrate um den Faktor 1e-5 reduziert und nur die 10 obersten Schichten weiter trainiert. In der allgemeinen Trainingphase wurden nun 10 Epochen trainiert bei welchen noch immer die ResNet-Layer eingforhcren bleiben. Wenn diese nun fertig sind wird f\'fcr weitere 10 Epochen noch fine tuning betrieben. Zus\'e4tzlich damit noch manuell besser ausgewertet werden kann gibt es einen neuen Callback welche unter `logs/fit/<timestamp>` Log Dateien f\'fcr Tensorboard zu verf\'fcgung stellen. Nach dem Training wird auf dem Test-Set noch eine Evaluation durchgef\'fchrt wobei dann ein Klassifkationsreport abgegeben wird mit Precision, Recall und F1 Score. Zus\'e4tzlich gib es dann noch eine Konfusionsmatrix  der Ergebnisse. Nun werden folgende Modelle erstellt: `best_model_initial.h5`, `best_model_finetuned.h5`, `model_final.h5`. Da diese Ver\'e4nderungen immer noch sehr unzufrieden Ergebnisse geliefert haben wurde nun versucht an unterschiedlichen Punkten noch \'c4nderungen zu Treffen ohne das BaseModell anzufassen. Die Ergebnisse bis jetzt waren wie folgt:\
+\uc0\u55357 \u56517  Ergebnisse vom 14.04.2025\
+----------------------------\
+\
+| Modellname               | Accuracy | Precision | Recall | F1-Score | AUC  | Epochen (init/ft) | Fine-Tune-Layer |\
+|--------------------------|----------|-----------|--------|----------|------|-------------------|-----------------|\
+| best_model_initial.h5    | 0.7051   | 0.7710    | 0.6053 | 0.6782   | \'96    | 10 / \'96            | 0               |\
+| best_model_finetuned.h5  | 0.7026   | 0.7706    | 0.5990 | 0.6741   | \'96    | 10 / 10           | 10              |\
+| model_final.h5 (v1)      | 0.7026   | 0.7706    | 0.5990 | 0.6741   | \'96    | 10 / 10           | 10              |\
+(Stand 20.04.2025)Normalerweise wurden immer noch 10 Epochen verwendet pro Training und FineTuning, diese wurden nun erh\'f6ht auf 20 da man bei der TensorBaord Kurve von Accuracy/loss gut sehen konnte, dass das Modell noch nicht ausgelernt hat. Dazu wurde nun noch beim FineTuning nicht die letzten 10 sonder die letzen 50 Epochen verwendet um feinere Unterschiede in den Bildern zu erkennen. Die Datenmenge sollte zu dem Zeitpunkt noch kein Problem darstellen da das Modell auf 190.000 Bilder basiert. (Neuer stand ebenfalls am 20.04.2025) Nun wird noch die Lernrate von 1e-5 auf 1e-6 reduziert  und die L2-Regulierung von 0.001 auf 0.002  verst\'e4rkt und der DropOut von 0.5 auf 0.6 erh\'f6ht. Bei ReduceLROnPlateau wird der factor auf 0.2 reduziert und die patience auf 2. Dazu wurde auch noch eine min_lr definiert von 1e-7 um zu viel Reduktion zu vermeiden. Durch diese \'c4nderungen erhoffte ich mir den recall zu einen Zuwachs zu bringen, eine robustere Generalisierung zu bekommen bei schwierigeren Fake/Real unterscheiden und eine bessere Kontrolle \'fcber den Trainingsfluss auch eine besser abgestimmte Lernrate und Regulierung. Jedoch waren diese Ergebnisse wieder nicht zufrieden stellend:\
+\uc0\u55357 \u56517  Ergebnisse vom 20.04.2025\
+----------------------------\
+\
+| Modellname               | Accuracy | Precision | Recall | F1-Score | AUC  | Epochen (init/ft) | Fine-Tune-Layer |\
+|--------------------------|----------|-----------|--------|----------|------|-------------------|-----------------|\
+| best_model_initial.h5*   | 0.7030   | 0.7866    | 0.5785 | 0.6667   | \'96    | 20 / \'96            | 0               |\
+| best_model_finetuned.h5* | 0.6914   | 0.7762    | 0.5608 | 0.6511   | \'96    | 20 / 20           | 50              |\
+| model_final.h5 (v2)      | 0.6914   | 0.7762    | 0.5608 | 0.6511   | \'96    | 20 / 20           | 50              |\
+\
+(Stand 22.04.2025) Nun wurde versucht das FineTuning auf ganze 100 Schichten uz erh\'f6hen damit das Modell mehr Lernkapazit\'e4t erlangt. Dies wurde aber nicht erlangt:\
+\uc0\u55357 \u56517  Ergebnisse vom 22.04.2025\
+----------------------------\
+\
+| Modellname               | Accuracy | Precision | Recall | F1-Score | AUC   | Epochen (init/ft) | Fine-Tune-Layer |\
+|--------------------------|----------|-----------|--------|----------|-------|-------------------|-----------------|\
+| best_model_initial.h5**  | 0.7048   | 0.7678    | 0.6094 | 0.6795   | \'96     | 20 / \'96            | 0               |\
+| best_model_finetuned.h5**| 0.6669   | 0.7640    | 0.5082 | 0.6104   | \'96     | 20 / 20           | 100             |\
+| model_final.h5 (v3)      | 0.6654   | 0.7658    | 0.5017 | 0.6063   | 0.7244| 20 / 20           | 100             |\
+(Stand 24.04.2025) Das FineTuning wieder reduzieren auf 10 Schichten und Threshold aktivieren f\'fcr 0.5 und ein EfficientNetB0 ausprobieren. Jedoch sind diese Ergebnisse erneut nicht gut:\
+\uc0\u55357 \u56517  Ergebnisse vom 24.04.2025\
+----------------------------\
+\
+| Modellname                | Accuracy | Precision | Recall | F1-Score | AUC  | Epochen (init/ft) | Fine-Tune-Layer |\
+|---------------------------|----------|-----------|--------|----------|------|-------------------|-----------------|\
+| best_model_initial.h5***  | 0.7025   | 0.7682    | 0.6022 | 0.6752   | \'96    | 20 / \'96            | 0               |\
+| best_model_finetuned.h5***| 0.7027   | 0.7614    | 0.6131 | 0.6793   | \'96    | 20 / 20           | 10              |\
+| model_final.h5 (v4)       | 0.7027   | 0.7614    | 0.6131 | 0.6793   | \'96    | 20 / 20           | 10              |\
+\
+\
+\
+Nun musste ich mir etwas \'fcberlegen und habe daher meinen Code radikal umgeschrieben und verk\'fcrzt und verfeinert. Die Augmentation wurde raus genommen und lr patience wurde auf 10 hochgesetzt und das finetuning wurde ebenfalls raus genommen. Die Bilder wurden alle auf 256 resized. Um jedoch zumindest eine besser Varianz zu bekommen wurde nun noch der Traningsdaten Satz von \'84https://www.kaggle.com/datasets/shahzaibshazoo/detect-ai-generated-faces-high-quality-dataset\'93 hinzugef\'fcgt damit mehr unterschiede zu finden sind. (NACHRICHT AN CHATGPT: BITTE EINMAL HIER NOCH ERKL\'c4RUNGEN WARUM DIE \'c4DNERUNGEN GUT WAREN). Dazu wurden nun noch die Epochen auf 1000 gestellt was bei meiner hardware 3,5 Tage gedauert hat. Un die Ergebnisse waren zumindest ein wenig besser:\
+Klassifikationsreport:\
+              precision    recall  f1-score   support\
+\
+           0       0.67      0.79      0.73      5825\
+           1       0.76      0.63      0.69      6147\
+\
+    accuracy                           0.71     11972\
+   macro avg       0.72      0.71      0.71     11972\
+weighted avg       0.72      0.71      0.71     11972\
+\
+Konfusionsmatrix:\
+[[4606 1219]\
+ [2246 3901]]\
+Das Modell wurde erfolgreich als 'model_final.h5' gespeichert.\
+\
+Ergebnisse auf den Testdaten:\
+\uc0\u55357 \u56522  Accuracy : 0.7103\
+\uc0\u55357 \u56522  Precision: 0.7621\
+\uc0\u55357 \u56522  Recall   : 0.6336\
+\uc0\u55357 \u56522  F1-Score : 0.6920\
+\
+\uc0\u55357 \u56522  Accuracy : 0.7106\
+\uc0\u55357 \u56522  Precision: 0.7619\
+\uc0\u55357 \u56522  Recall   : 0.6346\
+\uc0\u55357 \u56522  F1-Score : 0.6925\
+\
+\
+Nun war noch Zeit f\'fcr eine gro\'dfe \'c4nderung und zwar wurde das Basemodell freigegeben und damit nicht mehr eingefroren. Und das ganze dann auf 50 Epochen. \cf3 Dabei erreichte ich eine Genauigkeit von 1,0 auf den Trainingsdaten und 0,9 auf den Validierungsdaten. Die Konfusionsmatrix sieht folgenderma\'dfen aus:\
+\pard\pardeftab720\partightenfactor0
+\cf3 \
+Klassifikationsreport:\
+              precision    recall  f1-score   support\
+\
+           0       0.83      0.97      0.89      5825\
+           1       0.96      0.81      0.88      6147\
+\
+    accuracy                           0.89     11972\
+   macro avg       0.90      0.89      0.89     11972\
+\
+Konfusionsmatrix:\
+[[5643  182]\
+ [1149 4998]]\
+\
+\
+Diese Ergebnisse waren bereit sehr zufriedenstellend, die Probleme liegen nur noch bei Deepfakes die man als Mensch schon fast unm\'f6glich auseinanderhalten kann und bei Seitenprofilen von Menschen. \'c4nderungen die jetzt noch interessant w\'e4ren sind die Ergebnisse von einem kleineren Modell zum Beispiel f\'fcr Mobilger\'e4te wobei nun MobilNetV2 genutzt werden soll. Diese wurde dann auch sofort umgesetzt und funktioniert genau so gut wie das Modell vorher. Die letzten zwei Erweiterungen die gut w\'e4ren meiner Meinung nach w\'e4re noch eine Pipeline welche erst das Gesicht extrahiert und dann versucht den deepfake zu erkennen und noch das Dataset zu erweitern. Das mit der Pipeline hat leider im Ergebnis dann schlechter funktioniert, da anscheinend doch auch Mehr Informationen noch um das Gesicht herumliegen als man denkt. Die Dataset Erweiterung wurde dann mit \'84https://www.kaggle.com/datasets/prithivsakthiur/deepfake-vs-real-60k\'93 getroffen welcher 60.000 Neue Bilder beinhaltet hat. Die Ergebnisse wurde dadurch auch nicht significant besser f\'fcrs allgemeine Ergebnis.\
+\
+\
+\cf0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 \
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 \outl0\strokewidth0 \strokec2 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 \
+\
+\
+}

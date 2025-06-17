@@ -1,0 +1,39 @@
+\babel@toc {ngerman}{}\relax 
+\contentsline {chapter}{Abstract}{2}{chapter*.1}%
+\contentsline {chapter}{\numberline {1}Einleitung}{4}{chapter.1}%
+\contentsline {chapter}{\numberline {2}Datensätze}{5}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Verwendete Datensätze}{5}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Datenorganisation und -aufteilung}{5}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Vorverarbeitung und Datenpipeline}{6}{section.2.3}%
+\contentsline {section}{\numberline {2.4}Zusammenfassung der Datenbasis}{7}{section.2.4}%
+\contentsline {chapter}{\numberline {3}Methodik}{8}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Experimentumgebung}{8}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Verwendete Datensätze}{8}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Modellarchitektur}{8}{section.3.3}%
+\contentsline {section}{\numberline {3.4}Vorverarbeitung und Datenpipeline}{9}{section.3.4}%
+\contentsline {section}{\numberline {3.5}Trainingskonfiguration und Hyperparameter}{9}{section.3.5}%
+\contentsline {section}{\numberline {3.6}Ablauf des Trainings und der Evaluation}{10}{section.3.6}%
+\contentsline {section}{\numberline {3.7}Versuchsplanung und Entwicklungsschritte}{10}{section.3.7}%
+\contentsline {section}{\numberline {3.8}Zusammenfassung}{11}{section.3.8}%
+\contentsline {chapter}{\numberline {4}Implementierung}{12}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Datensätze und Use-Case}{12}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Projektstruktur}{12}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Modelldefinition}{13}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Training und Fine-Tuning}{13}{section.4.4}%
+\contentsline {subsection}{\numberline {4.4.1}Phase 1: Initialtraining (10 Epochen)}{14}{subsection.4.4.1}%
+\contentsline {section}{\numberline {4.5}Ergebnisse und iterative Anpassungen}{15}{section.4.5}%
+\contentsline {subsection}{\numberline {4.5.1}Radikale Umstrukturierung}{16}{subsection.4.5.1}%
+\contentsline {paragraph}{\nonumberline Klassifikationsreport}{17}{paragraph*.14}%
+\contentsline {paragraph}{\nonumberline Konfusionsmatrix}{17}{paragraph*.16}%
+\contentsline {section}{\numberline {4.6}Letzte Optimierung}{17}{section.4.6}%
+\contentsline {paragraph}{\nonumberline Klassifikationsreport}{17}{paragraph*.18}%
+\contentsline {paragraph}{\nonumberline Konfusionsmatrix}{17}{paragraph*.20}%
+\contentsline {section}{\numberline {4.7}Ausblick}{17}{section.4.7}%
+\contentsline {chapter}{\numberline {5}Evaluation}{18}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Quantitative Ergebnisse}{18}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Konfusionsmatrix}{18}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Analyse der Ergebnisse}{18}{section.5.3}%
+\contentsline {chapter}{\numberline {6}Diskussion}{19}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Limitationen der aktuellen Arbeit}{19}{section.6.1}%
+\contentsline {chapter}{\numberline {7}Fazit}{20}{chapter.7}%
+\providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

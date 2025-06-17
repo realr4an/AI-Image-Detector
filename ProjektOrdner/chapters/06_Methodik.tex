@@ -1,0 +1,102 @@
+%─────────────────────────────────────────────────────────────────────────────
+% Kapitel 3: Methodik
+%─────────────────────────────────────────────────────────────────────────────
+\chapter{Methodik}
+\label{chap:methodik}
+
+\section{Experimentumgebung}
+
+Die Durchführung sämtlicher Trainings- und Evaluationsläufe erfolgte auf einer lokalen Workstation mit NVIDIA RTX 2070 Super GPU (8~GB VRAM) unter Windows 10. Für das gesamte Deep-Learning-Framework kam TensorFlow (Version 2.x) in Verbindung mit Keras zum Einsatz. Der Trainingsprozess wurde über Visual Studio Code gesteuert und sowohl GPU- als auch CPU-Implementierungen wurden automatisch erkannt und genutzt. Insbesondere die Aktivierung des Mixed Precision Trainings (\texttt{mixed\_float16}) trug dazu bei, die GPU-Auslastung zu optimieren und die Speichereffizienz sowie Trainingsgeschwindigkeit deutlich zu steigern. Typischerweise betrug die Dauer eines Trainingsschritts (bei einer Batchgröße von 64) im Mittel ca.~385~ms.
+
+\section{Verwendete Datensätze}
+
+Für das Training und die Validierung des Deepfake-Klassifikators wurden mehrere öffentlich verfügbare Bilddatensätze von Kaggle integriert (siehe Kapitel~\ref{chap:datensaetze}). Im Fokus standen:
+
+\begin{itemize}
+  \item \textbf{Deepfake and Real Images:}  
+    Hauptdatensatz mit 190.000 Bildern (256$\times$256~px, JPG), aufgeteilt in 140.000 Trainingsbilder, 39.400 Validierungsbilder und 10.905 Testbilder.
+  \item \textbf{Detect AI-Generated Faces (High Quality):}  
+    Ergänzend hinzugefügt, um die Varianz im Training zu erhöhen, mit 1.001 Fake- und 2.202 Real-Bildern.
+\end{itemize}
+
+Alle Daten wurden auf einen konsistenten Verzeichnisbaum (\texttt{train/}, \texttt{validation/}, \texttt{test/}, jeweils mit Unterordnern \texttt{real}/\texttt{fake}) gebracht, um eine automatisierte, fehlerfreie Datenzufuhr während des Trainings zu gewährleisten.
+
+\section{Modellarchitektur}
+
+Das eingesetzte neuronale Netz basiert auf einem vortrainierten \texttt{ResNet50}-Backbone (ImageNet-Gewichte, ohne Top-Layer). Diese Architektur wurde gewählt, da sie in der Literatur als sehr robust für Bildklassifikationsaufgaben gilt und in eigenen Vorversuchen anderen Modellen wie EfficientNetB0 überlegen war.
+
+Der eigentliche Klassifikationskopf besteht aus den folgenden Schichten:
+
+\begin{itemize}
+  \item \texttt{GlobalAveragePooling2D()} als Übergang von Feature Maps zu einem Vektor.
+  \item \texttt{Dense(128)}-Schicht mit ReLU-Aktivierung und L2-Regularisierung ($\lambda=0{,}002$), um Overfitting zu begegnen.
+  \item \texttt{Dropout(0{,}6)} zur weiteren Reduzierung von Überanpassung.
+  \item \texttt{Dense(1)} mit Sigmoid-Aktivierung und explizitem \texttt{float32}-Output, um trotz Mixed Precision stabile und exakte Ausgaben zu gewährleisten.
+\end{itemize}
+
+Im finalen Modell ist der gesamte ResNet50-Block von Beginn an trainierbar (\texttt{base\_model.trainable = True}). Auf ein stufenweises Fine-Tuning einzelner Layer wird somit verzichtet; alle Schichten werden gleichberechtigt im Gradientenabstieg aktualisiert.
+
+\section{Vorverarbeitung und Datenpipeline}
+
+Die Bildvorverarbeitung und das Datenhandling erfolgen vollautomatisch durch den \texttt{ImageDataGenerator} aus \texttt{tensorflow.keras.preprocessing.image}. Als Preprocessing wird die \texttt{preprocess\_input}-Funktion von ResNet50 verwendet, die neben der Skalierung auf $256\times256$~Pixel auch eine kanalweise Normalisierung vornimmt. 
+
+Im Gegensatz zu frühen Projektphasen wird im finalen Ansatz komplett auf künstliche Datenaugmentation (Rotation, Flip, Zoom etc.) verzichtet, da empirische Tests gezeigt haben, dass diese im Gesamtsystem keine Vorteile bringen, sondern die Stabilität sogar vermindern können.
+
+Bilder werden batchweise (Batchgröße 64) geladen und die Labels (\texttt{real} / \texttt{fake}) automatisch aus der Ordnerstruktur als binäre Klassen extrahiert.
+
+\section{Trainingskonfiguration und Hyperparameter}
+
+Die Modellkompilierung erfolgt mit dem Adam-Optimierer (Standardparameter), \emph{binary\_crossentropy} als Verlustfunktion und \emph{accuracy} als zentrale Trainingsmetrik. Wesentliche Trainingsparameter:
+
+\begin{itemize}
+    \item Input-Größe: $256\times256\times3$
+    \item Batchgröße: 64
+    \item Trainingsdauer: 50~Epochen (mit früherem Abbruch durch Callback möglich)
+    \item Mixed Precision Policy: \texttt{mixed\_float16}
+\end{itemize}
+
+\textbf{Callbacks} für Monitoring und Steuerung:
+
+\begin{itemize}
+    \item \texttt{ModelCheckpoint}: Speichert das jeweils beste Modell (nach Validierungs-Accuracy, Datei: \texttt{best\_model\_initial.h5}).
+    \item \texttt{ReduceLROnPlateau}: Reduziert die Lernrate bei Stagnation der Validierungsverluste (Faktor 0{,}2, Patience 10, min\_lr $1\mathrm{e}{-7}$).
+    \item \texttt{TensorBoard}: Logging aller Trainingsmetriken und Lernverläufe zur späteren Analyse.
+\end{itemize}
+
+\section{Ablauf des Trainings und der Evaluation}
+
+Der vollständige Trainingsprozess lässt sich wie folgt beschreiben:
+
+\begin{enumerate}
+    \item Initialisierung des Modells und Laden der Trainings- und Validierungsdaten über die ImageDataGenerator-Pipeline.
+    \item Training über bis zu 50~Epochen mit Echtzeit-Monitoring aller Metriken (Trainings-/Validierungs-Accuracy und -Loss).
+    \item Speichern des besten Modells während des Trainings per Callback.
+    \item Nach Abschluss des Trainings erfolgt die Evaluation auf dem separaten Test-Set:
+        \begin{itemize}
+            \item Berechnung von \textbf{Loss} und \textbf{Accuracy} mittels \texttt{model.evaluate(...)}
+            \item Erstellung eines detaillierten \textbf{Klassifikationsreports} (Precision, Recall, F1-Score) mittels \texttt{sklearn.metrics.classification\_report}
+            \item Darstellung der \textbf{Konfusionsmatrix} mittels \texttt{sklearn.metrics.confusion\_matrix}
+        \end{itemize}
+    \item Das finale Modell wird als \texttt{model\_final.h5} gespeichert.
+\end{enumerate}
+
+\section{Versuchsplanung und Entwicklungsschritte}
+
+Im Verlauf des Projekts wurden zahlreiche Alternativen und Erweiterungen getestet, darunter:
+
+\begin{itemize}
+    \item \textbf{Datenaugmentation:}  
+        Zu Beginn wurden diverse Augmentations (Rotation, Flip, Zoom) zur Erhöhung der Varianz erprobt. Sie wurden jedoch im finalen Ansatz entfernt, da sie zu schwankenden und weniger stabilen Trainingsergebnissen führten.
+    \item \textbf{Stufenweises Fine-Tuning:}  
+        Ein schrittweises Training mit initial eingefrorenem Feature-Extractor und nachfolgend sukzessiv freigegebenen Layern (z.\,B. 10/50/100 Schichten) brachte keinen konsistenten Vorteil gegenüber dem sofortigen End-to-End-Training.
+    \item \textbf{Hyperparameter-Tuning:}  
+        Verschiedene Lernraten ($\eta=10^{-4}$ bis $10^{-6}$), Regularisierungsstärken (L2, Dropout), Batchgrößen und Optimierer wurden evaluiert. Die finale Konfiguration orientiert sich an den stabilsten und am besten generalisierenden Settings.
+    \item \textbf{Architekturvergleich:}  
+        Alternative Backbones wie EfficientNetB0 wurden verglichen, letztlich fiel die Entscheidung jedoch klar zugunsten von ResNet50 aus.
+    \item \textbf{Datensatzdiversifizierung:}  
+        Das Einbinden zusätzlicher Datensätze (wie „Detect AI-Generated Faces“) führte zu einer Erhöhung der Varianz und geringfügigen Verbesserungen im Recall, jedoch nicht zu signifikant besseren Gesamtergebnissen.
+\end{itemize}
+
+\section{Zusammenfassung}
+
+Die beschriebene Methodik gewährleistet ein reproduzierbares, transparentes und effizientes Training eines Deep-Learning-Modells zur Deepfake-Erkennung, wobei sämtliche Entscheidungen datengestützt und iterativ empirisch begründet wurden.

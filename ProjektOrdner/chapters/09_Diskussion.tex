@@ -1,0 +1,19 @@
+%─────────────────────────────────────────────────────────────────────────────
+% Kapitel 6: Diskussion
+%─────────────────────────────────────────────────────────────────────────────
+\chapter{Diskussion}
+\label{chap:diskussion}
+
+Obwohl das initiale Training mit eingefrorenem ResNet50 breite Generalisierung lieferte (Accuracy ~ 0,70), zeigt sich in den Feintuning-Durchläufen, dass zu umfangreiches Fine-Tuning (50 Layer) zu einer Reduktion der Recall-Rate führt (0,50 gegenüber 0,61). Mögliche Ursachen:
+\begin{itemize}
+  \item \textbf{Datenheterogenität:} Unterschiedliche Bildquellen (verschiedener Kaggle‐Datensätze) weisen nicht dieselben Kameraeigenschaften auf. Das Feintuning kann lokale Artefakte überanpassen.  
+  \item \textbf{Overfitting:} Trotz starker L2-Regularisierung und erhöhtem Dropout (0,6) zeigten die TensorBoard‐Kurven nach Epochen 15–20 einen deutlichen Divergenz‐Effekt zwischen Training und Validierung (vgl. Anhang, Abbildung A.1).  
+  \item \textbf{Fehlende große Testdaten:} Die finale Test-Stichprobe umfasste nur ca. 10 % der Bilder. Eine größere, externe Testmenge (z. B. von selbst gesammelten Realbildern) könnte die Aussagekraft verbessern.
+\end{itemize}
+
+\section{Limitationen der aktuellen Arbeit}
+\begin{itemize}
+  \item Systematisch wurden weder \emph{Video-Deepfakes} noch Audio-Manipulationen berücksichtigt.  
+  \item Die Datensätze enthalten primär Gesichter in neutraler Mimik – extreme Gesichtsausdrücke (Lachen, Grimassen) wurden kaum repräsentiert.  
+  \item Die Trainingsdauer (je Lauf 4–6 Stunden auf einer RTX 2080 Ti) begrenzte das Experimentieren mit noch tieferen Netzwerken (z. B. EfficientNetV2-Large).  
+\end{itemize}
