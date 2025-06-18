@@ -9,9 +9,9 @@ from tqdm import tqdm
 # Testdatenpfade
 test_dir_fake = "Dataset/Test/Fake"
 test_dir_real = "Dataset/Test/Real"
-
-# Modellverzeichnis und -namen
-model_files = [f for f in os.listdir() if f.endswith(".h5")]
+print(os.listdir("models/ResNet50_Deepfake_detection"))
+model_dir = "models/ResNet50_Deepfake_detection"
+model_files = [os.path.join(model_dir, f) for f in os.listdir(model_dir) if f.endswith(".h5")]
 
 # Bildgröße (wird aus erstem Modell gelesen)
 def get_model_input_size(model_path):
