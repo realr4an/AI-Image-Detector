@@ -7,3 +7,4 @@ Dataset
 /models/*
 /face_detection_project/*
 *.DS_Store
+/downloads/*
