@@ -1,0 +1,90 @@
+%─────────────────────────────────────────────────────────────────────────────
+% Kapitel 4: Implementierung
+%─────────────────────────────────────────────────────────────────────────────
+\chapter{Implementierung}
+\label{chap:implementierung}
+
+Im Folgenden skizzieren wir die wichtigsten Code-Snippets und die Projektstruktur des Trainingsskripts. Die komplette Code‐Basis befindet sich im Verzeichnis \texttt{src/} (nicht Bestandteil dieser Arbeit). 
+
+\section{Projektstruktur des Trainingsskripts}
+\begin{verbatim}
+Projekt/
+|-- data/
+|   |-- train/
+|   \-- test/
+|-- models/
+|   |-- model1.h5
+|   \-- model2.h5
+\-- src/
+    |-- train.py
+    \-- evaluate.py
+\end{verbatim}
+
+
+\section{Wichtige Codeausschnitte}
+\subsection{Initialisierung des Modells}
+\begin{lstlisting}[language=Python, caption=ResNet50-Modell-Definition aus \texttt{train\_model.py}]
+import tensorflow as tf
+from tensorflow.keras.applications import ResNet50
+from tensorflow.keras.layers import GlobalAveragePooling2D, Dense, Dropout
+from tensorflow.keras.regularizers import l2
+
+def create_model(freeze_base: bool = True, l2_factor: float = 0.002):
+    base_model = ResNet50(weights='imagenet', include_top=False, input_shape=(256,256,3))
+    base_model.trainable = not freeze_base
+    
+    x = base_model.output
+    x = GlobalAveragePooling2D()(x)
+    x = Dense(128, activation='relu', kernel_regularizer=l2(l2_factor))(x)
+    x = Dropout(0.6)(x)
+    output = Dense(1, activation='sigmoid')(x)
+    
+    model = tf.keras.Model(inputs=base_model.input, outputs=output)
+    return model
+\end{lstlisting}
+
+\subsection{Training und Fine-Tuning}
+\begin{lstlisting}[language=Python, caption=Training‐Loop aus \texttt{train\_model.py}]
+# Phase 1: Initialtraining
+model = create_model(freeze_base=True)
+model.compile(
+    optimizer=tf.keras.optimizers.Adam(learning_rate=1e-4),
+    loss='binary_crossentropy',
+    metrics=['accuracy', tf.keras.metrics.AUC()]
+)
+
+early_stop = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
+checkpoint_init = tf.keras.callbacks.ModelCheckpoint(
+    'best_model_initial.h5', monitor='val_accuracy', save_best_only=True)
+
+tensorboard_cb = tf.keras.callbacks.TensorBoard(log_dir='logs/fit/initial', update_freq='epoch')
+
+model.fit(
+    train_dataset,
+    epochs=20,
+    validation_data=val_dataset,
+    callbacks=[early_stop, checkpoint_init, tensorboard_cb]
+)
+
+# Phase 2: Fine-Tuning
+for layer in model.layers[-50:]:
+    layer.trainable = True
+
+model.compile(
+    optimizer=tf.keras.optimizers.Adam(learning_rate=1e-6),
+    loss='binary_crossentropy',
+    metrics=['accuracy', tf.keras.metrics.AUC()]
+)
+
+checkpoint_ft = tf.keras.callbacks.ModelCheckpoint(
+    'best_model_finetuned.h5', monitor='val_accuracy', save_best_only=True)
+reduce_lr = tf.keras.callbacks.ReduceLROnPlateau(
+    monitor='val_loss', factor=0.2, patience=2, min_lr=1e-7)
+
+model.fit(
+    train_dataset,
+    epochs=20,
+    validation_data=val_dataset,
+    callbacks=[early_stop, checkpoint_ft, reduce_lr, tensorboard_cb]
+)
+\end{lstlisting}

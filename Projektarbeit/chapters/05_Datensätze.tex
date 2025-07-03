@@ -1,0 +1,98 @@
+%─────────────────────────────────────────────────────────────────────────────
+% Kapitel 2: Datensätze
+%─────────────────────────────────────────────────────────────────────────────
+\chapter{Datensätze}
+\label{chap:datensaetze}
+
+In diesem Kapitel werden die für die Klassifikation von Deepfake- und Real-Bildern eingesetzten Datensätze vorgestellt sowie deren organisatorische Struktur und technische Vorverarbeitung erläutert. Ziel ist es, eine umfassende Übersicht über Quellen, Aufbereitung und Verteilung der Daten bereitzustellen.
+
+\section{Verwendete Datensätze}
+
+\begin{itemize}
+    \item \textbf{Deepfake-vs-Real-Classification}\cite{prithivmlmods_2025}:  
+    Deepfake-vs-Real-60K ist ein großskaliger Bildklassifikationsdatensatz zur Unterscheidung zwischen Deepfake- und realen Gesichtern. Er umfasst ca. 60.000 hochqualitative Bilder, bestehend aus etwa 30.000 Fake-Bildern (Label 0) und 30.000 Real-Bildern (Label 1), und unterstützt das Training, die Evaluation sowie das Benchmarking von Deepfake-Detektionsmodellen. Durch die nahezu ausgeglichene Klassenverteilung und die Vielfalt der Motive soll eine hohe Klassifikationsgenauigkeit und Generalisierbarkeit gewährleistet werden.
+    
+    \textbf{Key Features:}
+    \begin{itemize}
+        \item ca. 30.000 Deepfake-Bilder (Label 0)
+        \item ca. 30.000 Real-Bilder (Label 1)
+        \item Entwickelt für Bildklassifikationsaufgaben
+        \item Unterstützung von Training, Evaluation und Benchmarking
+        \item Ausgewogene Klassenverteilung und hochwertige Samples
+    \end{itemize}
+    
+    Nach eigenen Beobachtungen stammen viele der als „Fake“ gelabelten Bilder aus öffentlich verfügbaren Social-Media-Quellen (z.\,B. Instagram-Posts mit Filtern) und zeigen teilweise Filtereffekte statt klassischer Deepfake-Manipulationen.
+
+      \item \textbf{Detect AI-Generated Faces: High-Quality Dataset}\cite{shahzaibshazoo2025}:  
+  Dieses Dataset bietet über 3.000 sorgfältig kuratierte Gesichtsaufnahmen – 1.001 AI-generierte (Label\,0) und 2.002 echte Bilder (Label\,1) – und wurde speziell für Bildklassifikations- und Deepfake-Detektionsaufgaben entwickelt. Es eignet sich hervorragend für:
+  \begin{itemize}
+    \item Deepfake-Erkennung und Authentizitätsprüfung
+    \item Training, Evaluierung und Benchmarking von Klassifikatoren
+    \item Robustheitsanalysen über verschiedene Ethnien und Altersgruppen
+  \end{itemize}
+  Nach eigener Beobachtung sind die „Fake“-Bilder sehr stark KI-manipuliert (teilweise Filter- oder Stiltransfer-Effekte), während die Real-Bilder ältere, häufig schwarz-weiß aufgenommene Porträts unterschiedlicher Personen enthalten.
+
+
+      \item \textbf{deepfake and real images}\cite{le_et_al_openforensics_2025}\:  
+  Der größte im Projekt verwendete Datensatz umfasst insgesamt ca. 190.305 Gesichter – 95.092 manipulierte (Label\,0) und 95.213 reale Bilder (Label\,1) im Standardformat 256×256 JPG. Grundlage ist das „OpenForensics“ V.1.0.0 Dataset, das ursprünglich über Zenodo bereitgestellt wurde. OpenForensics bietet reichhaltige, face-wise Annotationen für Deepfake-Detektion und -Segmentierung und ist damit hervorragend geeignet für:
+  \begin{itemize}
+    \item Training, Evaluation und Benchmarking von Manipulationserkennungsmodellen
+    \item Robustheitsanalysen über verschiedene Ethnien, Altersgruppen und Mehrfach-Gesichter-Szenarien
+    \item Forschung in Deepfake-Prävention und allgemeiner Gesichtserkennung
+  \end{itemize}
+  Die manipulierten Bilder sind vielfältig erstellt worden (z. B. mittels GANs, Filtertechniken und Stiltransfers), während die Real-Bilder echte Porträts zeigen. Alle Bilder wurden vor Verwendung auf 256×256 Pixel zugeschnitten und vereinheitlicht.
+
+\end{itemize}
+
+\section{Datenorganisation und -aufteilung}
+
+Für die automatisierte Verarbeitung und einheitliche Strukturierung aller Bilder wurde eine klare Ordnerhierarchie eingeführt. Die Daten sind in drei Hauptbereiche unterteilt:
+
+\begin{itemize}
+  \item \texttt{train}: Trainingsdaten  
+  \item \texttt{validation}: Validierungsdaten  
+  \item \texttt{test}: Testdaten  
+\end{itemize}
+
+Innerhalb jedes dieser Verzeichnisse gibt es zwei Unterordner:
+
+\begin{itemize}
+  \item \texttt{real}: Enthält alle echten Gesichter  
+  \item \texttt{fake}: Enthält alle manipulierten bzw. synthetischen Gesichter  
+\end{itemize}
+
+Die Zuweisung der Bilder zu den Splits erfolgte klassenstratifiziert, sodass in jedem Split sowohl echte als auch gefälschte Bilder im selben Verhältnis vertreten sind. Dieses Setup erlaubt es, mit Keras’ \texttt{flow\_from\_directory}-Funktion automatisch Labels aus den Ordnernamen abzuleiten und die Daten speicherschonend sowie performanzoptimiert zu laden.
+
+\section{Vorverarbeitung und Datenpipeline}
+
+Die zentralen Entscheidungen zur Bildvorbereitung und Datenbereitstellung im Training:
+
+\begin{itemize}
+  \item \textbf{Einheitliche Bildgröße (256×256):}  
+  Gewählt, um eine konstante Eingangsform für das ResNet50-Netzwerk sicherzustellen und so Überanpassung an ungleichmäßig skalierte Bilder zu vermeiden.
+
+  \item \textbf{Normalisierung gemäß ResNet50-Konvention:}  
+  Dient dazu, die Pixelwertverteilung an die beim Vortraining verwendeten Statistics anzupassen und dadurch schnellere Konvergenz und stabilere Gradienten zu ermöglichen.
+
+  \item \textbf{Verzicht auf Datenaugmentation:}  
+  Da die Datensätze bereits vielfältig und ausgeglichen sind, wurde auf zusätzliche künstliche Transformationen verzichtet, um Trainingszeiten zu minimieren und Verzerrungen zu vermeiden.
+
+  \item \textbf{Batch-Größe 64 mit automatischem Label-Encoding:}  
+  Eine mittlere Batch-Größe wurde gewählt, um Effizienz (GPU-Auslastung) und Speicherbedarf in Einklang zu bringen. Die Labels werden direkt aus der Verzeichnisstruktur extrahiert, um Fehlerquellen zu minimieren.
+\end{itemize}
+
+
+\section{Zusammenfassung der Datenbasis}
+
+Insgesamt wurden drei umfangreiche Bilddatensätze für die Deepfake-Erkennung herangezogen, die jeweils unterschiedliche Stärken und Einsatzmöglichkeiten aufweisen:
+
+\begin{itemize}
+  \item \textbf{Deepfake-vs-Real-Classification}:  
+    60 000 Bilder mit ausgeglichenen Klassen (30 000 Real, 30 000 Fake) – ideal für Benchmark-Vergleiche und initiales Modelltraining.
+  \item \textbf{Detect AI-Generated Faces}:  
+    Über 3 000 hochqualitative Samples (2 002 Real, 1 001 synthetisch) – ermöglicht detaillierte Robustheitsanalysen über Ethnien, Altersgruppen und Stiltransfereffekte.
+  \item \textbf{deepfake and real images (OpenForensics V.1.0.0)}:  
+    Ca. 190 305 annotierte Bilder (95 213 Real, 95 092 Fake) mit face-wise Segmentierungsdaten – exzellent für Szenarien mit Mehrfachgesichtern und Feinstrukturanalysen.
+\end{itemize}
+
+Die konsistente Ordnerstruktur in \texttt{train}, \texttt{validation} und \texttt{test} zusammen mit der Standardvorverarbeitung (Skalierung auf 256×256 Pixel, ResNet50-Normkonvention) und dem automatischen Label-Encoding schafft eine einheitliche Basis für effizientes Training und verlässliche Evaluation ohne zusätzliche Datenaugmentation.
