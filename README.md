@@ -1,71 +1,81 @@
-> ⚠️ **ACHTUNG: Dieses Repository befindet sich aktuell in aktiver Entwicklung. Inhalte, Funktionen und Strukturen können sich kurzfristig ändern!**  
-> Bitte beachte, dass noch nicht alles vollständig implementiert oder final getestet ist. Feedback ist dennoch willkommen!
-
 # 🤖 AI Image Detector
 
-**CNN-basiertes Tool zur automatischen Erkennung von KI-generierten Bildern (Deepfakes & mehr).**
+> ⚠️ **Dieses Repository befindet sich in aktiver Entwicklung. Inhalte und Strukturen können sich noch ändern.**
 
----
+Dieses Projekt zielt darauf ab, mithilfe von Convolutional Neural Networks (CNNs) automatisch zu erkennen, ob Bilder von einer KI erzeugt wurden oder ob es sich um echte Fotografien handelt. Neben Trainingsskripten stehen Werkzeuge zum Download von Datensätzen und vortrainierten Modellen sowie mehrere Streamlit-Apps für die Demonstration bereit.
 
-## 📌 Projektbeschreibung
-Dieses Projekt nutzt ein Convolutional Neural Network (CNN), um automatisch zu erkennen, ob ein Bild von einer Künstlichen Intelligenz (wie DALL·E, MidJourney oder Stable Diffusion) generiert wurde oder ob es sich um eine echte Fotografie handelt.
+## Projektstruktur
 
-Die Anwendung bietet zusätzlich Erklärungen (Grad-CAM), um nachvollziehen zu können, welche Bildbereiche für die Entscheidung des CNN entscheidend sind.
+```
+AI-Image-Detector/
+├── Scripts/
+│   ├── App/                # Streamlit-Anwendungen
+│   │   ├── app.py
+│   │   ├── app_new.py
+│   │   └── alternative_app.py
+│   ├── PrepData/           # Daten- und Modell-Downloads
+│   │   ├── fetch_data.py
+│   │   └── download_all_models.py
+│   ├── Trainer/            # Trainingsskripte
+│   │   ├── train_model.py
+│   │   ├── train_model_new.py
+│   │   ├── MobileNetV2Trainer.py
+│   │   └── DeepfakePipelineTrainer.py
+│   ├── evaluate_models.py  # Modelle bewerten
+│   └── requirements.txt    # benötigte Python-Pakete
+├── Projektarbeit/          # wissenschaftliche Ausarbeitung (LaTeX)
+└── README.md
+```
 
----
+## Installation
 
-## 🚀 Features
-
-- ✅ **Benutzerfreundliche Oberfläche:** Einfacher Upload und Klassifikation von Bildern.
-- ✅ **CNN-Modell:** Hohe Genauigkeit bei der Unterscheidung von echten und KI-generierten Bildern.
-- ✅ **Erklärbarkeit:** Grad-CAM Visualisierung zur Erklärung der Modellentscheidung.
-
----
-
-## 📦 Installation
-
-Um das Projekt lokal zu starten, folge diesen Schritten:
-
-1. **Repository klonen:**
 ```bash
-git clone https://github.com/realr4an/ai-image-detector.git
-cd ai-image-detector
+pip install -r Scripts/requirements.txt
 ```
 
-2. **Dependencies installieren:**
+## Datensätze herunterladen
+
+Die Datensätze werden über die Kaggle API geladen. Lege dazu deine Kaggle-Credentials in `~/.kaggle/kaggle.json` ab oder exportiere `KAGGLE_USERNAME` und `KAGGLE_KEY`. Anschließend ruft
+
 ```bash
-pip install -r requirements.txt
+python Scripts/PrepData/fetch_data.py
 ```
 
-3. **Streamlit App starten:**
+die in `fetch_data.py` definierten Datensätze ab. Die Rohdaten landen unter `Scripts/downloads/`, das aufbereitete Trainings-, Validierungs- und Testmaterial unter `Scripts/data/`.
+
+## Vortrainierte Modelle beziehen
+
+Um Modelle von Hugging Face herunterzuladen, müssen folgende Variablen gesetzt sein:
+
+- `HF_TOKEN` – dein Zugriffstoken (Pflicht)
+- `HF_USERNAME` – optionaler Benutzername, standardmäßig `realr4an`
+
+Dann genügt
+
 ```bash
-streamlit run app.py
+export HF_TOKEN=hf_xxx
+# optional: export HF_USERNAME=dein_name
+python Scripts/PrepData/download_all_models.py
 ```
 
----
+Die Modelle werden im Ordner `Scripts/PrepData/models/` abgelegt.
 
-## 🛠 Verwendete Technologien
+## Streamlit-App starten
 
-- **Python** (TensorFlow/Keras, OpenCV, NumPy)
-- **Streamlit** (für die Benutzeroberfläche)
-- **CNN-Modell** (Convolutional Neural Network)
-- **Grad-CAM** (zur Visualisierung der Entscheidungsgrundlage)
+Wähle eine der Apps im Verzeichnis `Scripts/App/` aus, z.B.
 
----
-
-## 📁 Projektstruktur
-
-```
-ai-image-detector/
-├── app.py                 # Streamlit App
-├── model.h5               # Vortrainiertes CNN-Modell (nicht enthalten, selbst trainieren!)
-├── requirements.txt       # Abhängigkeiten
-├── README.md              # Diese Datei
-└── images/                # Beispielbilder (optional)
+```bash
+streamlit run Scripts/App/app.py
 ```
 
----
+Weitere Varianten sind `app_new.py` und `alternative_app.py`.
 
-## 🧑‍💻 Autor
+## Training
 
-- **realr4an** - [realr4an](https://github.com/realr4an)
+Ein einfaches Training lässt sich mit folgendem Befehl starten:
+
+```bash
+python Scripts/Trainer/train_model.py
+```
+
+Weitere Trainer und Optionen befinden sich im Unterordner `Scripts/Trainer/`.
