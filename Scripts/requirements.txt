@@ -1,0 +1,9 @@
+streamlit
+numpy==1.23.5
+tensorflow-macos==2.10.0
+tensorflow-metal
+opencv-python
+scipy
+huggingface_hub
+setuptools
+wheel

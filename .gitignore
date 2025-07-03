@@ -1,4 +1,8 @@
 *.jpg
 *.png
-/Dataset
+/Dataset/*
 *.DS_Store
+/old_modells/*
+/data/*
+/models/*
+/face_detection_project/*

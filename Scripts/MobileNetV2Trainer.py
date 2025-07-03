@@ -20,7 +20,7 @@ class MobileNetV2Trainer:
                  val_dir='Dataset/validation',
                  test_dir='Dataset/test',
                  img_size=(256,256),
-                 batch_size=128,
+                 batch_size=64,
                  initial_epochs=50,
                  output_dir='misclassified'):
         self.train_dir = train_dir
