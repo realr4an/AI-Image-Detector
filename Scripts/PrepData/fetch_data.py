@@ -91,7 +91,7 @@ def copy_files_in_chunks(file_list, split, label, chunk_size=2000, min_free_ram_
                 filename = f"{uuid.uuid4().hex}_{filename}"
                 dest_path = os.path.join(dest_dir, filename)
             shutil.copy2(src, dest_path)
-
+        print(f"✅ {len(chunk)} Dateien kopiert nach {dest_dir}")
         available_gb = psutil.virtual_memory().available / (1024 ** 3)
         print(f"🧠 Freier RAM: {available_gb:.2f} GB")
         gc.collect()
