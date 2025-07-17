@@ -1,0 +1,126 @@
+(.venv) C:\Users\1\Documents\GitHub\AI-Image-Detector>python Scripts/Trainer/DeepfakePipelineTrainer.py
+✅ YOLOv8-Modell erfolgreich geladen.
+✅ Gefundene GPU(s): [PhysicalDevice(name='/physical_device:GPU:0', device_type='GPU')]
+Model: "sequential"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ resnet50 (Functional)       (None, 8, 8, 2048)        23587712  
+
+ global_average_pooling2d (G  (None, 2048)             0
+ lobalAveragePooling2D)
+
+ dense (Dense)               (None, 128)               262272    
+
+ dropout (Dropout)           (None, 128)               0
+
+ dense_1 (Dense)             (None, 1)                 129
+
+=================================================================
+Total params: 23,850,113
+Trainable params: 23,796,993
+Non-trainable params: 53,120
+_________________________________________________________________
+
+🚀 Starte Training mit ResNet50_YOLO_Pipeline...
+Epoch 1/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.4357 - accuracy: 0.9375      
+Epoch 1: val_accuracy improved from -inf to 0.55764, saving model to C:\Users\1\Documents\GitHub\AI-Image-Detector\Models\ResNet50_YOLO_Pipeline_20250713-230159.h5
+2846/2846 [==============================] - 3406s 1s/step - loss: 0.4357 - accuracy: 0.9375 - val_loss: 0.9037 - val_accuracy: 0.5576 - lr: 1.0000e-04
+Epoch 2/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0815 - accuracy: 0.9971     
+Epoch 2: val_accuracy improved from 0.55764 to 0.64145, saving model to C:\Users\1\Documents\GitHub\AI-Image-Detector\Models\ResNet50_YOLO_Pipeline_20250713-230159.h5
+2846/2846 [==============================] - 3300s 1s/step - loss: 0.0815 - accuracy: 0.9971 - val_loss: 0.7296 - val_accuracy: 0.6414 - lr: 1.0000e-04
+Epoch 3/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0612 - accuracy: 0.9889     
+Epoch 3: val_accuracy did not improve from 0.64145
+2846/2846 [==============================] - 3300s 1s/step - loss: 0.0612 - accuracy: 0.9889 - val_loss: 0.8497 - val_accuracy: 0.6301 - lr: 1.0000e-04
+Epoch 4/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0171 - accuracy: 0.9974     
+Epoch 4: val_accuracy did not improve from 0.64145
+2846/2846 [==============================] - 3302s 1s/step - loss: 0.0171 - accuracy: 0.9974 - val_loss: 0.8308 - val_accuracy: 0.6026 - lr: 1.0000e-04
+Epoch 5/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0095 - accuracy: 0.9981     
+Epoch 5: val_accuracy did not improve from 0.64145
+2846/2846 [==============================] - 3313s 1s/step - loss: 0.0095 - accuracy: 0.9981 - val_loss: 0.8356 - val_accuracy: 0.6353 - lr: 1.0000e-04
+Epoch 6/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0638 - accuracy: 0.9752     
+Epoch 6: val_accuracy did not improve from 0.64145
+2846/2846 [==============================] - 3300s 1s/step - loss: 0.0638 - accuracy: 0.9752 - val_loss: 0.7948 - val_accuracy: 0.5674 - lr: 1.0000e-04
+Epoch 7/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0284 - accuracy: 0.9954     
+Epoch 7: val_accuracy did not improve from 0.64145
+2846/2846 [==============================] - 3317s 1s/step - loss: 0.0284 - accuracy: 0.9954 - val_loss: 0.8208 - val_accuracy: 0.5928 - lr: 1.0000e-04
+Epoch 8/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0068 - accuracy: 0.9998     
+Epoch 8: val_accuracy improved from 0.64145 to 0.70560, saving model to C:\Users\1\Documents\GitHub\AI-Image-Detector\Models\ResNet50_YOLO_Pipeline_20250713-230159.h5
+2846/2846 [==============================] - 3305s 1s/step - loss: 0.0068 - accuracy: 0.9998 - val_loss: 0.6189 - val_accuracy: 0.7056 - lr: 1.0000e-04
+Epoch 9/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0131 - accuracy: 0.9978     
+Epoch 9: val_accuracy improved from 0.70560 to 0.77850, saving model to C:\Users\1\Documents\GitHub\AI-Image-Detector\Models\ResNet50_YOLO_Pipeline_20250713-230159.h5
+2846/2846 [==============================] - 3288s 1s/step - loss: 0.0131 - accuracy: 0.9978 - val_loss: 0.5027 - val_accuracy: 0.7785 - lr: 1.0000e-04
+Epoch 10/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0104 - accuracy: 0.9993     
+Epoch 10: val_accuracy improved from 0.77850 to 0.78090, saving model to C:\Users\1\Documents\GitHub\AI-Image-Detector\Models\ResNet50_YOLO_Pipeline_20250713-230159.h5
+2846/2846 [==============================] - 3302s 1s/step - loss: 0.0104 - accuracy: 0.9993 - val_loss: 0.4908 - val_accuracy: 0.7809 - lr: 1.0000e-04
+Epoch 11/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0071 - accuracy: 0.9986     
+Epoch 11: val_accuracy did not improve from 0.78090
+2846/2846 [==============================] - 3310s 1s/step - loss: 0.0071 - accuracy: 0.9986 - val_loss: 0.7487 - val_accuracy: 0.6804 - lr: 1.0000e-04
+Epoch 12/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0029 - accuracy: 0.9998
+Epoch 12: val_accuracy improved from 0.78090 to 0.82069, saving model to C:\Users\1\Documents\GitHub\AI-Image-Detector\Models\ResNet50_YOLO_Pipeline_20250713-230159.h5
+2846/2846 [==============================] - 3312s 1s/step - loss: 0.0029 - accuracy: 0.9998 - val_loss: 0.4427 - val_accuracy: 0.8207 - lr: 1.0000e-04
+Epoch 13/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0726 - accuracy: 0.9929
+Epoch 13: val_accuracy did not improve from 0.82069
+2846/2846 [==============================] - 3304s 1s/step - loss: 0.0726 - accuracy: 0.9929 - val_loss: 0.5100 - val_accuracy: 0.7727 - lr: 1.0000e-04
+Epoch 14/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0326 - accuracy: 0.9984
+Epoch 14: val_accuracy did not improve from 0.82069
+2846/2846 [==============================] - 3302s 1s/step - loss: 0.0326 - accuracy: 0.9984 - val_loss: 0.6007 - val_accuracy: 0.6753 - lr: 1.0000e-04
+Epoch 15/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0265 - accuracy: 0.9992
+Epoch 15: val_accuracy did not improve from 0.82069
+2846/2846 [==============================] - 3310s 1s/step - loss: 0.0265 - accuracy: 0.9992 - val_loss: 1.0567 - val_accuracy: 0.4963 - lr: 1.0000e-04
+Epoch 16/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0115 - accuracy: 0.9994   
+Epoch 16: val_accuracy did not improve from 0.82069
+2846/2846 [==============================] - 3215s 1s/step - loss: 0.0115 - accuracy: 0.9994 - val_loss: 0.9982 - val_accuracy: 0.5158 - lr: 1.0000e-04
+Epoch 17/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0049 - accuracy: 0.9998     
+Epoch 17: val_accuracy did not improve from 0.82069
+2846/2846 [==============================] - 4025s 1s/step - loss: 0.0049 - accuracy: 0.9998 - val_loss: 0.9672 - val_accuracy: 0.5205 - lr: 1.0000e-04
+Epoch 18/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0047 - accuracy: 0.9998     
+Epoch 18: val_accuracy did not improve from 0.82069
+2846/2846 [==============================] - 3151s 1s/step - loss: 0.0047 - accuracy: 0.9998 - val_loss: 3.4755 - val_accuracy: 0.4924 - lr: 1.0000e-04
+Epoch 19/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0325 - accuracy: 0.9909         
+Epoch 19: val_accuracy did not improve from 0.82069
+2846/2846 [==============================] - 3089s 1s/step - loss: 0.0325 - accuracy: 0.9909 - val_loss: 0.7932 - val_accuracy: 0.6454 - lr: 1.0000e-04
+Epoch 20/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0035 - accuracy: 0.9998     
+Epoch 20: val_accuracy did not improve from 0.82069
+2846/2846 [==============================] - 3105s 1s/step - loss: 0.0035 - accuracy: 0.9998 - val_loss: 0.6720 - val_accuracy: 0.6701 - lr: 1.0000e-04
+Epoch 21/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0027 - accuracy: 0.9998         
+Epoch 21: val_accuracy did not improve from 0.82069
+2846/2846 [==============================] - 4355s 2s/step - loss: 0.0027 - accuracy: 0.9998 - val_loss: 1.3326 - val_accuracy: 0.4967 - lr: 1.0000e-04
+Epoch 22/25
+2344/2846 [=======================>......] - ETA: 9:26 - loss: 0.0193 - accuracy: 0.9974Traceback (most recent call last):
+
+
+📊 Klassifikationsreport:
+              precision    recall  f1-score   support
+
+           0     0.8076    0.7787    0.7929      9613
+           1     0.7803    0.8090    0.7944      9338
+
+    accuracy                         0.7936     18951
+   macro avg     0.7939    0.7938    0.7936     18951
+weighted avg     0.7941    0.7936    0.7936     18951
+
+📊 Konfusionsmatrix:
+[[7486 2127]
+ [1784 7554]]

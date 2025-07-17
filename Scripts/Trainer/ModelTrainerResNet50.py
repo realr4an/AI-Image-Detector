@@ -56,7 +56,7 @@ def train_model():
     # ─────────────────────────────────────────────────────────────────────────
     img_width, img_height = 256, 256
     batch_size = 64
-    initial_epochs = 50
+    initial_epochs = 25
     base_model_name = "ResNet50" # Wichtig für den Dateinamen des Modells
 
     # Korrekte Pfade zu den Daten-Unterordnern
@@ -135,7 +135,7 @@ def train_model():
         validation_steps=validation_generator.samples // batch_size,
         callbacks=callbacks,
         workers=4,
-        use_multiprocessing=False # Besser auf False setzen, wenn Probleme auftreten
+        use_multiprocessing=False
     )
 
     print(f"\n✅ Training abgeschlossen. Das beste Modell wurde hier gespeichert:\n{model_filepath}")

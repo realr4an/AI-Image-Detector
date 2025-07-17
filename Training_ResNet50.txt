@@ -1,0 +1,151 @@
+(.venv) C:\Users\1\Documents\GitHub\AI-Image-Detector>python Scripts/Trainer/ModelTrainerResNet50.py 
+✅ Gefundene GPU(s): [PhysicalDevice(name='/physical_device:GPU:0', device_type='GPU')]
+Found 182192 images belonging to 2 classes.
+Found 48468 images belonging to 2 classes.
+2025-07-10 06:11:00.364380: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX AVX2
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2025-07-10 06:11:00.473240: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1616] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 6073 MB memory:  -> device: 0, name: NVIDIA GeForce RTX 2070 SUPER, pci bus id: 0000:01:00.0, compute capability: 7.5
+Model: "sequential"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ resnet50 (Functional)       (None, 8, 8, 2048)        23587712
+
+ global_average_pooling2d (G  (None, 2048)             0
+ lobalAveragePooling2D)
+
+ dense (Dense)               (None, 128)               262272
+
+ dropout (Dropout)           (None, 128)               0
+
+ dense_1 (Dense)             (None, 1)                 129
+
+=================================================================
+Total params: 23,850,113
+Trainable params: 23,796,993
+Non-trainable params: 53,120
+_________________________________________________________________
+Epoch 1/25
+2025-07-10 06:11:10.270738: I tensorflow/stream_executor/cuda/cuda_dnn.cc:384] Loaded cuDNN version 8600
+2846/2846 [==============================] - ETA: 0s - loss: 0.1474 - accuracy: 0.9581      
+Epoch 1: val_accuracy improved from -inf to 0.85892, saving model to C:\Users\1\Documents\GitHub\AI-Image-Detector\Models\ResNet50_20250710-061102.h5
+2846/2846 [==============================] - 952s 330ms/step - loss: 0.1474 - accuracy: 0.9581 - val_loss: 0.3651 - val_accuracy: 0.8589 - lr: 0.0010
+Epoch 2/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0682 - accuracy: 0.9764   
+Epoch 2: val_accuracy improved from 0.85892 to 0.95412, saving model to C:\Users\1\Documents\GitHub\AI-Image-Detector\Models\ResNet50_20250710-061102.h5
+2846/2846 [==============================] - 909s 319ms/step - loss: 0.0682 - accuracy: 0.9764 - val_loss: 0.1196 - val_accuracy: 0.9541 - lr: 0.0010
+Epoch 3/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0576 - accuracy: 0.9802   
+Epoch 3: val_accuracy improved from 0.95412 to 0.96598, saving model to C:\Users\1\Documents\GitHub\AI-Image-Detector\Models\ResNet50_20250710-061102.h5
+2846/2846 [==============================] - 903s 317ms/step - loss: 0.0576 - accuracy: 0.9802 - val_loss: 0.0910 - val_accuracy: 0.9660 - lr: 0.0010
+Epoch 4/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0484 - accuracy: 0.9836   
+Epoch 4: val_accuracy improved from 0.96598 to 0.97129, saving model to C:\Users\1\Documents\GitHub\AI-Image-Detector\Models\ResNet50_20250710-061102.h5
+2846/2846 [==============================] - 906s 318ms/step - loss: 0.0484 - accuracy: 0.9836 - val_loss: 0.0862 - val_accuracy: 0.9713 - lr: 0.0010
+Epoch 5/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0422 - accuracy: 0.9853   
+Epoch 5: val_accuracy did not improve from 0.97129
+2846/2846 [==============================] - 903s 317ms/step - loss: 0.0422 - accuracy: 0.9853 - val_loss: 0.1117 - val_accuracy: 0.9597 - lr: 0.0010
+Epoch 6/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0368 - accuracy: 0.9873   
+Epoch 6: val_accuracy improved from 0.97129 to 0.97550, saving model to C:\Users\1\Documents\GitHub\AI-Image-Detector\Models\ResNet50_20250710-061102.h5
+2846/2846 [==============================] - 908s 319ms/step - loss: 0.0368 - accuracy: 0.9873 - val_loss: 0.0645 - val_accuracy: 0.9755 - lr: 0.0010
+Epoch 7/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0331 - accuracy: 0.9887   
+Epoch 7: val_accuracy improved from 0.97550 to 0.97719, saving model to C:\Users\1\Documents\GitHub\AI-Image-Detector\Models\ResNet50_20250710-061102.h5
+2846/2846 [==============================] - 908s 319ms/step - loss: 0.0331 - accuracy: 0.9887 - val_loss: 0.0729 - val_accuracy: 0.9772 - lr: 0.0010
+Epoch 8/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0304 - accuracy: 0.9895   
+Epoch 8: val_accuracy did not improve from 0.97719
+2846/2846 [==============================] - 907s 319ms/step - loss: 0.0304 - accuracy: 0.9895 - val_loss: 0.0703 - val_accuracy: 0.9763 - lr: 0.0010
+Epoch 9/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0269 - accuracy: 0.9907   
+Epoch 9: val_accuracy improved from 0.97719 to 0.98045, saving model to C:\Users\1\Documents\GitHub\AI-Image-Detector\Models\ResNet50_20250710-061102.h5
+2846/2846 [==============================] - 909s 319ms/step - loss: 0.0269 - accuracy: 0.9907 - val_loss: 0.0596 - val_accuracy: 0.9805 - lr: 0.0010
+Epoch 10/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0256 - accuracy: 0.9916   
+Epoch 10: val_accuracy did not improve from 0.98045
+2846/2846 [==============================] - 908s 319ms/step - loss: 0.0256 - accuracy: 0.9916 - val_loss: 0.0700 - val_accuracy: 0.9797 - lr: 0.0010
+Epoch 11/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0243 - accuracy: 0.9923   
+Epoch 11: val_accuracy did not improve from 0.98045
+2846/2846 [==============================] - 909s 319ms/step - loss: 0.0243 - accuracy: 0.9923 - val_loss: 0.0969 - val_accuracy: 0.9683 - lr: 0.0010
+Epoch 12/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0246 - accuracy: 0.9930   
+Epoch 12: val_accuracy did not improve from 0.98045
+2846/2846 [==============================] - 908s 319ms/step - loss: 0.0246 - accuracy: 0.9930 - val_loss: 0.0848 - val_accuracy: 0.9755 - lr: 0.0010
+Epoch 13/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0219 - accuracy: 0.9926   
+Epoch 13: val_accuracy did not improve from 0.98045
+2846/2846 [==============================] - 908s 319ms/step - loss: 0.0219 - accuracy: 0.9926 - val_loss: 0.0917 - val_accuracy: 0.9779 - lr: 0.0010
+Epoch 14/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0196 - accuracy: 0.9936   
+Epoch 14: val_accuracy did not improve from 0.98045
+2846/2846 [==============================] - 909s 319ms/step - loss: 0.0196 - accuracy: 0.9936 - val_loss: 0.0888 - val_accuracy: 0.9735 - lr: 0.0010
+Epoch 15/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0191 - accuracy: 0.9940   
+Epoch 15: val_accuracy did not improve from 0.98045
+2846/2846 [==============================] - 907s 319ms/step - loss: 0.0191 - accuracy: 0.9940 - val_loss: 0.1097 - val_accuracy: 0.9722 - lr: 0.0010
+Epoch 16/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0183 - accuracy: 0.9942   
+Epoch 16: val_accuracy did not improve from 0.98045
+2846/2846 [==============================] - 907s 319ms/step - loss: 0.0183 - accuracy: 0.9942 - val_loss: 0.1555 - val_accuracy: 0.9679 - lr: 0.0010
+Epoch 17/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0164 - accuracy: 0.9950   
+Epoch 17: val_accuracy did not improve from 0.98045
+2846/2846 [==============================] - 907s 319ms/step - loss: 0.0164 - accuracy: 0.9950 - val_loss: 0.0981 - val_accuracy: 0.9749 - lr: 0.0010
+Epoch 18/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0164 - accuracy: 0.9949   
+Epoch 18: val_accuracy did not improve from 0.98045
+2846/2846 [==============================] - 908s 319ms/step - loss: 0.0164 - accuracy: 0.9949 - val_loss: 0.1265 - val_accuracy: 0.9677 - lr: 0.0010
+Epoch 19/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0166 - accuracy: 0.9950   
+Epoch 19: val_accuracy did not improve from 0.98045
+2846/2846 [==============================] - 907s 319ms/step - loss: 0.0166 - accuracy: 0.9950 - val_loss: 0.0733 - val_accuracy: 0.9779 - lr: 0.0010
+Epoch 20/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0074 - accuracy: 0.9980   
+Epoch 20: val_accuracy improved from 0.98045 to 0.98535, saving model to C:\Users\1\Documents\GitHub\AI-Image-Detector\Models\ResNet50_20250710-061102.h5
+2846/2846 [==============================] - 906s 318ms/step - loss: 0.0074 - accuracy: 0.9980 - val_loss: 0.0641 - val_accuracy: 0.9853 - lr: 2.0000e-04
+Epoch 21/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0052 - accuracy: 0.9986   
+Epoch 21: val_accuracy did not improve from 0.98535
+2846/2846 [==============================] - 899s 316ms/step - loss: 0.0052 - accuracy: 0.9986 - val_loss: 0.0791 - val_accuracy: 0.9847 - lr: 2.0000e-04
+Epoch 22/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0045 - accuracy: 0.9988   
+Epoch 22: val_accuracy did not improve from 0.98535
+2846/2846 [==============================] - 902s 317ms/step - loss: 0.0045 - accuracy: 0.9988 - val_loss: 0.0870 - val_accuracy: 0.9843 - lr: 2.0000e-04
+Epoch 23/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0042 - accuracy: 0.9990   
+Epoch 23: val_accuracy did not improve from 0.98535
+2846/2846 [==============================] - 900s 316ms/step - loss: 0.0042 - accuracy: 0.9990 - val_loss: 0.0854 - val_accuracy: 0.9852 - lr: 2.0000e-04
+Epoch 24/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0035 - accuracy: 0.9992     
+Epoch 24: val_accuracy did not improve from 0.98535
+2846/2846 [==============================] - 8100s 3s/step - loss: 0.0035 - accuracy: 0.9992 - val_loss: 0.1109 - val_accuracy: 0.9838 - lr: 2.0000e-04
+Epoch 25/25
+2846/2846 [==============================] - ETA: 0s - loss: 0.0032 - accuracy: 0.9992   
+Epoch 25: val_accuracy did not improve from 0.98535
+2846/2846 [==============================] - 902s 317ms/step - loss: 0.0032 - accuracy: 0.9992 - val_loss: 0.1096 - val_accuracy: 0.9842 - lr: 2.0000e-04
+
+✅ Training abgeschlossen. Das beste Modell wurde hier gespeichert:
+C:\Users\1\Documents\GitHub\AI-Image-Detector\Models\ResNet50_20250710-061102.h5
+
+🧪 Evaluiere das Modell auf dem Test-Set...
+Found 19949 images belonging to 2 classes.
+312/312 [==============================] - 187s 597ms/step - loss: 0.2677 - accuracy: 0.9506
+Test Loss: 0.2677, Test Accuracy: 0.9506
+312/312 [==============================] - 88s 278ms/step
+
+📊 Klassifikationsreport:
+              precision    recall  f1-score   support
+
+           0       0.92      0.98      0.95      9933
+           1       0.98      0.92      0.95     10016
+
+    accuracy                           0.95     19949
+   macro avg       0.95      0.95      0.95     19949
+weighted avg       0.95      0.95      0.95     19949
+
+📊 Konfusionsmatrix:
+[[9777  156]
+ [ 830 9186]]
