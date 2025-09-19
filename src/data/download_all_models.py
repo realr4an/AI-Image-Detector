@@ -19,10 +19,9 @@ if not HF_TOKEN:
 
 HF_USERNAME = os.getenv("HF_USERNAME", "realr4an")
 
-BASE_DIR = Path(__file__).resolve().parent              # → PrepData
-SCRIPTS_DIR = BASE_DIR.parent                           # → Scripts
-ROOT_DIR = SCRIPTS_DIR.parent                           # → AI-IMAGE-DETECTOR
-MODELS_DIR = ROOT_DIR / "Models"                        # → AI-IMAGE-DETECTOR/Models
+BASE_DIR = Path(__file__).resolve().parent              # → src/data
+ROOT_DIR = BASE_DIR.parent.parent                       # → AI-IMAGE-DETECTOR
+MODELS_DIR = ROOT_DIR / "models" / "pretrained"        # → AI-IMAGE-DETECTOR/models/pretrained
 
 
 logging.basicConfig(

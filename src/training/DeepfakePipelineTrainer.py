@@ -22,9 +22,10 @@ from sklearn.metrics import classification_report, confusion_matrix
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", ".."))
 
-DATA_DIR = os.path.join(ROOT_DIR, "Data")
-MODEL_DIR = os.path.join(ROOT_DIR, "Models")
-LOG_DIR = os.path.join(ROOT_DIR, "logs")
+DATA_DIR = os.path.join(ROOT_DIR, "data", "processed")
+MODELS_ROOT = os.path.join(ROOT_DIR, "models")
+MODEL_DIR = os.path.join(MODELS_ROOT, "checkpoints")
+LOG_DIR = os.path.join(ROOT_DIR, "logs", "training_runs")
 
 class DeepfakePipelineTrainer:
     """
@@ -92,13 +93,14 @@ class DeepfakePipelineTrainer:
         self.epochs = initial_epochs
         self.base_model_name = "ResNet50_YOLO_Pipeline"
 
+        os.makedirs(MODELS_ROOT, exist_ok=True)
         os.makedirs(MODEL_DIR, exist_ok=True)
         os.makedirs(LOG_DIR, exist_ok=True)
         
         policy = mixed_precision.Policy('mixed_float16')
         mixed_precision.set_global_policy(policy)
 
-        yolo_model_path = os.path.join(ROOT_DIR, 'Models', 'YOLOv8_Face_Detection', 'weights', 'best.pt')
+        yolo_model_path = os.path.join(MODELS_ROOT, 'YOLOv8_Face_Detection', 'weights', 'best.pt')
         if not os.path.exists(yolo_model_path):
             raise FileNotFoundError(f"YOLO-Modell nicht gefunden unter: {yolo_model_path}")
         self.face_detector = YOLO(yolo_model_path)

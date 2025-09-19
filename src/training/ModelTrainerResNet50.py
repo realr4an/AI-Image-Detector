@@ -7,16 +7,16 @@ import datetime
 # ─────────────────────────────────────────────────────────────────────────────
 # Pfad-Konfiguration basierend auf der Projektstruktur
 # ─────────────────────────────────────────────────────────────────────────────
-# Aktueller Pfad des Skripts (z.B. AI-IMAGE-DETECTOR/Scripts/Trainer)
+# Aktueller Pfad des Skripts (z.B. AI-IMAGE-DETECTOR/src/training)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Wurzelverzeichnis des Projekts (z.B. AI-IMAGE-DETECTOR)
 ROOT_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", ".."))
 
 # Pfade für Daten, Modelle und Logs definieren
-DATA_DIR = os.path.join(ROOT_DIR, "Data")
-MODEL_DIR = os.path.join(ROOT_DIR, "Models")
-LOG_DIR = os.path.join(ROOT_DIR, "logs")
+DATA_DIR = os.path.join(ROOT_DIR, "data", "processed")
+MODEL_DIR = os.path.join(ROOT_DIR, "models", "checkpoints")
+LOG_DIR = os.path.join(ROOT_DIR, "logs", "training_runs")
 
 
 def train_model():

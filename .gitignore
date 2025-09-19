@@ -3,8 +3,13 @@
 Dataset
 *.DS_Store
 /old_modells/*
+/face_detection_project/*
 /data/*
 /models/*
-/face_detection_project/*
-*.DS_Store
 /downloads/*
+
+# Erlaube Strukturplatzhalter
+!/data/**/.gitkeep
+!data/**/.gitkeep
+!/models/**/.gitkeep
+!models/**/.gitkeep

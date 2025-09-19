@@ -1,81 +1,103 @@
 # 🤖 AI Image Detector
 
-> ⚠️ **Dieses Repository befindet sich in aktiver Entwicklung. Inhalte und Strukturen können sich noch ändern.**
-
-Dieses Projekt zielt darauf ab, mithilfe von Convolutional Neural Networks (CNNs) automatisch zu erkennen, ob Bilder von einer KI erzeugt wurden oder ob es sich um echte Fotografien handelt. Neben Trainingsskripten stehen Werkzeuge zum Download von Datensätzen und vortrainierten Modellen sowie mehrere Streamlit-Apps für die Demonstration bereit.
+Dieses Projekt untersucht, ob sich KI-generierte und echte Bilder mithilfe von Convolutional Neural Networks (CNNs) automatisch unterscheiden lassen. Im Repository finden sich Streamlit-Demos, Skripte für den Datenimport, Trainingspipelines für ResNet50/MobileNetV2 sowie Hilfswerkzeuge zur Modellbewertung.
 
 ## Projektstruktur
 
 ```
 AI-Image-Detector/
-├── Scripts/
-│   ├── App/                # Streamlit-Anwendungen
-│   │   ├── app.py
-│   │   ├── app_new.py
-│   │   └── alternative_app.py
-│   ├── PrepData/           # Daten- und Modell-Downloads
-│   │   ├── fetch_data.py
-│   │   └── download_all_models.py
-│   ├── Trainer/            # Trainingsskripte
-│   │   ├── train_model.py
-│   │   ├── train_model_new.py
-│   │   ├── MobileNetV2Trainer.py
-│   │   └── DeepfakePipelineTrainer.py
-│   ├── evaluate_models.py  # Modelle bewerten
-│   └── requirements.txt    # benötigte Python-Pakete
-├── Projektarbeit/          # wissenschaftliche Ausarbeitung (LaTeX)
+├── data/
+│   ├── downloads/            # temporäre Kaggle-Downloads (.gitkeep)
+│   ├── processed/            # train/validation/test-Struktur für Trainingsläufe
+│   └── raw/                  # unbearbeitete Datensätze (z.B. WIDER FACE)
+├── docs/
+│   ├── experiments/
+│   │   ├── figures/          # Trainingskurven, Confusion-Matrizen usw.
+│   │   └── notes/            # Versuchsdokumentationen und Auswertungen
+│   └── thesis/               # LaTeX-Projektarbeit
+├── logs/
+│   └── training_runs/        # TensorBoard-Logs vergangener Läufe
+├── models/
+│   ├── checkpoints/          # erzeugte Modell-Checkpoints
+│   └── pretrained/           # heruntergeladene Gewichte (z.B. YOLO)
+├── src/
+│   ├── app/                  # Streamlit-Anwendungen
+│   ├── data/                 # Skripte zum Daten-/Modell-Download
+│   ├── training/             # Trainingspipelines (ResNet50, MobileNetV2, YOLO)
+│   └── evaluation.py         # Bewertung gespeicherter Modelle
+├── requirements.txt          # Python-Abhängigkeiten
 └── README.md
 ```
+
+> ℹ️ Die leeren Ordner enthalten `.gitkeep`-Dateien, damit die Struktur im Git-Repository sichtbar bleibt.
 
 ## Installation
 
 ```bash
-pip install -r Scripts/requirements.txt
+pip install -r requirements.txt
 ```
 
-## Datensätze herunterladen
+Es wird empfohlen, ein eigenes virtuelles Environment (z.B. `python -m venv .venv`) zu verwenden.
 
-Die Datensätze werden über die Kaggle API geladen. Lege dazu deine Kaggle-Credentials in `~/.kaggle/kaggle.json` ab oder exportiere `KAGGLE_USERNAME` und `KAGGLE_KEY`. Anschließend ruft
+## Datensätze herunterladen (Kaggle)
+
+1. Speichere deine Kaggle-Credentials in `~/.kaggle/kaggle.json` **oder** exportiere `KAGGLE_USERNAME` und `KAGGLE_KEY`.
+2. Starte anschließend das Download- und Aufbereitungsskript:
 
 ```bash
-python Scripts/PrepData/fetch_data.py
+python src/data/fetch_data.py
 ```
 
-die in `fetch_data.py` definierten Datensätze ab. Die Rohdaten landen unter `Scripts/downloads/`, das aufbereitete Trainings-, Validierungs- und Testmaterial unter `Scripts/data/`.
+Die Rohdaten landen unter `data/downloads/`, aufbereitete Train-/Validation-/Test-Splits unter `data/processed/`.
 
-## Vortrainierte Modelle beziehen
+### Manuell sortierte Kaggle-Daten
 
-Um Modelle von Hugging Face herunterzuladen, müssen folgende Variablen gesetzt sein:
+Falls ein Datensatz manuell einsortiert werden muss, unterstützt `src/data/sort_kaggle_data.py` beim Verteilen in die train/val/test-Struktur.
 
-- `HF_TOKEN` – dein Zugriffstoken (Pflicht)
-- `HF_USERNAME` – optionaler Benutzername, standardmäßig `realr4an`
+## Vortrainierte Modelle (Hugging Face)
 
-Dann genügt
+Setze vor dem Download die folgenden Variablen:
 
 ```bash
 export HF_TOKEN=hf_xxx
 # optional: export HF_USERNAME=dein_name
-python Scripts/PrepData/download_all_models.py
+python src/data/download_all_models.py
 ```
 
-Die Modelle werden im Ordner `Scripts/PrepData/models/` abgelegt.
+Die Repositories werden in `models/pretrained/` gespiegelt.
 
 ## Streamlit-App starten
 
-Wähle eine der Apps im Verzeichnis `Scripts/App/` aus, z.B.
-
 ```bash
-streamlit run Scripts/App/app.py
+streamlit run src/app/app.py
 ```
 
-Weitere Varianten sind `app_new.py` und `alternative_app.py`.
+Alternative Varianten befinden sich im selben Verzeichnis (`app_new.py`, `alternative_app.py`).
 
 ## Training
 
-Ein einfaches Training lässt sich mit folgendem Befehl starten:
+Typische Trainingsläufe lassen sich über die Skripte im Ordner `src/training/` starten, z.B.:
 
 ```bash
-python Scripts/Trainer/train_model.py
+python src/training/ModelTrainerResNet50.py
+python src/training/ModelTrainerMobileNetV2.py
+python src/training/DeepfakePipelineTrainer.py
+python src/training/FaceExtractionTrainer.py
 ```
 
-Weitere Trainer und Optionen befinden sich im Unterordner `Scripts/Trainer/`.
+Checkpoints werden unter `models/checkpoints/` abgelegt, TensorBoard-Logs unter `logs/training_runs/`.
+
+## Evaluation
+
+Gespeicherte Modelle können mit dem Evaluationsskript getestet werden (erwartet Daten in `data/processed/test/` und Checkpoints in `models/checkpoints/`):
+
+```bash
+python src/evaluation.py
+```
+
+## Dokumentation & Ergebnisse
+
+- **`docs/experiments/`** enthält Versuchsdokumentationen, Kennzahlen und Visualisierungen.
+- **`docs/thesis/`** bündelt die zugehörige wissenschaftliche Ausarbeitung im LaTeX-Format.
+
+Viel Erfolg beim Experimentieren! 🎯

@@ -11,15 +11,14 @@ import tkinter as tk
 from tkinter import filedialog
 
 # ─────────────────────────────────────────────────────
-# 📁 Pfade relativ zur Datei in Scripts/PrepData/
+# 📁 Pfade relativ zur Datei in src/data/
 # ─────────────────────────────────────────────────────
 
-BASE_DIR = Path(__file__).resolve().parent        # → PrepData/
-SCRIPTS_DIR = BASE_DIR.parent                     # → Scripts/
-ROOT_DIR = SCRIPTS_DIR.parent                     # → AI-Image-Detector/
+BASE_DIR = Path(__file__).resolve().parent        # → src/data/
+ROOT_DIR = BASE_DIR.parent.parent                 # → AI-Image-Detector/
 
-DOWNLOADS_DIR = ROOT_DIR / "downloads"
-DATA_DIR = ROOT_DIR / "Data"
+DOWNLOADS_DIR = ROOT_DIR / "data" / "downloads"
+DATA_DIR = ROOT_DIR / "data" / "processed"
 
 # ─────────────────────────────────────────────────────
 

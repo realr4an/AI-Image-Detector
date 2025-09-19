@@ -10,12 +10,11 @@ from sklearn.model_selection import train_test_split
 from tqdm import tqdm
 
 # Pfade (Root: AI-IMAGE-DETECTOR/)
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))        # → PrepData
-SCRIPTS_DIR = os.path.dirname(BASE_DIR)                      # → Scripts
-ROOT_DIR = os.path.dirname(SCRIPTS_DIR)                      # → AI-IMAGE-DETECTOR
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))        # → src/data
+ROOT_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", ".."))
 
-DATA_DIR = os.path.join(ROOT_DIR, "Data")
-DOWNLOAD_ROOT = os.path.join(ROOT_DIR, "downloads")
+DATA_DIR = os.path.join(ROOT_DIR, "data", "processed")
+DOWNLOAD_ROOT = os.path.join(ROOT_DIR, "data", "downloads")
 
 # Dataset-Konfiguration
 DATASETS_INFO = {
@@ -173,4 +172,4 @@ if __name__ == "__main__":
         sys.exit(1)
 
     clean_downloads()
-    print("✅ Fertig. Datensatz(e) wurden in Data/ einsortiert.")
+    print("✅ Fertig. Datensatz(e) wurden in data/processed/ einsortiert.")

@@ -15,9 +15,10 @@ from ultralytics import YOLO
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", ".."))
 
-MODEL_DIR = os.path.join(ROOT_DIR, "Models")
-DATA_ROOT = os.path.join(ROOT_DIR, "Data")
-WIDERFACE_DIR = os.path.join(DATA_ROOT, "widerface")
+MODEL_DIR = os.path.join(ROOT_DIR, "models")
+PRETRAINED_DIR = os.path.join(MODEL_DIR, "pretrained")
+DATA_ROOT = os.path.join(ROOT_DIR, "data")
+WIDERFACE_DIR = os.path.join(DATA_ROOT, "raw", "widerface")
 DATASET_CONFIG_PATH = os.path.join(WIDERFACE_DIR, "data.yaml")
 
 class YOLOv8FaceTrainer:
@@ -30,7 +31,7 @@ class YOLOv8FaceTrainer:
     3. Starten des Trainingsprozesses.
     """
     def __init__(self,
-                 base_model='yolov8n.pt',
+                 base_model=os.path.join(PRETRAINED_DIR, 'yolov8n.pt'),
                  epochs=100,
                  batch_size=16,
                  img_size=640):
@@ -43,6 +44,7 @@ class YOLOv8FaceTrainer:
 
         os.makedirs(WIDERFACE_DIR, exist_ok=True)
         os.makedirs(MODEL_DIR, exist_ok=True)
+        os.makedirs(PRETRAINED_DIR, exist_ok=True)
 
     def _download_file(self, url, dest_path):
         """Lädt eine Datei mit Fortschrittsbalken herunter."""
