@@ -1,74 +1,122 @@
-import streamlit as st
-import numpy as np
-import tensorflow as tf
+#!/usr/bin/env python3
+"""Streamlit app for detecting AI-generated faces with YOLO cropping."""
+
+from pathlib import Path
+from typing import List, Optional
+
 import cv2
-import os
-from ultralytics import YOLO
-from tensorflow.keras.models import load_model
+import numpy as np
+import streamlit as st
 from tensorflow.keras.applications.resnet50 import preprocess_input
+from tensorflow.keras.models import load_model
+from ultralytics import YOLO
 
-MODEL_DIR = "."  # Verzeichnis mit den .h5-Modellen
+ROOT_DIR = Path(__file__).resolve().parents[2]
+MODEL_ROOT = ROOT_DIR / "Models"
+CLASSIFIER_DIRS = [
+    MODEL_ROOT,
+    MODEL_ROOT / "ResNet50_Deepfake_detection",
+]
+MODEL_EXTENSION = ".h5"
+YOLO_WEIGHTS = MODEL_ROOT / "YOLOv8_Face_Detection" / "weights" / "best.pt"
 
-@st.cache_resource
-def load_yolo_model():
-    return YOLO("face_detection_project/yolov8_face_detector/weights/best.pt")
 
-@st.cache_resource
-def get_available_models():
-    return [f for f in os.listdir(MODEL_DIR) if f.endswith(".h5")]
+def _list_classifier_paths() -> List[Path]:
+    """Return all available Keras classifier checkpoints."""
+    paths: List[Path] = []
+    for directory in CLASSIFIER_DIRS:
+        if not directory.exists():
+            continue
+        paths.extend(sorted(directory.glob(f"*{MODEL_EXTENSION}")))
+    return paths
 
-@st.cache_resource
-def load_cnn_model(path):
-    return load_model(path)
 
-def extract_face_yolo(image, model, conf_threshold=0.5):
-    results = model.predict(source=image, imgsz=640, conf=conf_threshold, save=False)
-    result = results[0]
+@st.cache_resource(show_spinner="Loading YOLO face detector ...")
+def load_yolo_model() -> YOLO:
+    if not YOLO_WEIGHTS.exists():
+        raise FileNotFoundError(
+            f"YOLO weights not found at {YOLO_WEIGHTS}. "
+            "Please download the face detector by running Scripts/PrepData/download_all_models.py."
+        )
+    return YOLO(str(YOLO_WEIGHTS))
 
-    if not result.boxes or len(result.boxes) == 0:
-        return image  # Kein Gesicht erkannt
 
-    box = result.boxes[0]
-    x1, y1, x2, y2 = map(int, box.xyxy[0].cpu().numpy())
+@st.cache_resource(show_spinner="Loading classifier ...")
+def load_classifier(model_path: Path):
+    return load_model(model_path)
+
+
+def _extract_face(image: np.ndarray, detector: YOLO, conf_threshold: float = 0.5) -> Optional[np.ndarray]:
+    """Run YOLO inference and return the first detected face crop."""
+    results = detector.predict(image, imgsz=640, conf=conf_threshold, verbose=False)
+    first = results[0]
+    if not first.boxes or len(first.boxes) == 0:
+        return None
+    x1, y1, x2, y2 = map(int, first.boxes[0].xyxy[0].cpu().numpy())
+    x1, y1 = max(0, x1), max(0, y1)
     return image[y1:y2, x1:x2]
 
-def preprocess_image(img, target_size=(256, 256)):
-    img_resized = cv2.resize(img, target_size)
-    img_rgb = cv2.cvtColor(img_resized, cv2.COLOR_BGR2RGB)
-    img_preprocessed = preprocess_input(img_rgb.astype("float32"))
-    return np.expand_dims(img_preprocessed, axis=0)
 
-def main():
-    st.title("KI-Bildprüfung mit Gesichtsextraktion")
+def _preprocess_face(face_image: np.ndarray, target_size: tuple[int, int] = (256, 256)) -> np.ndarray:
+    """Resize and preprocess the cropped face for ResNet50."""
+    resized = cv2.resize(face_image, target_size, interpolation=cv2.INTER_AREA)
+    rgb = cv2.cvtColor(resized, cv2.COLOR_BGR2RGB)
+    processed = preprocess_input(rgb.astype("float32"))
+    return np.expand_dims(processed, axis=0)
 
-    # Modell-Auswahl
-    available_models = get_available_models()
-    selected_model_name = st.selectbox("Wähle ein Modell:", available_models)
 
-    uploaded_file = st.file_uploader("Wähle ein Bild...", type=["jpg", "jpeg", "png"])
+def main() -> None:
+    st.set_page_config(page_title="AI Image Detector", page_icon="AI")
+    st.title("AI Image Detector with Face Extraction")
+    st.caption(
+        "Upload a portrait, let YOLO isolate the face, and evaluate if it is real or AI-generated."
+    )
 
-    if uploaded_file:
-        file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
-        img = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
+    classifier_paths = _list_classifier_paths()
+    if not classifier_paths:
+        st.error(
+            "No classifier checkpoints were found under the Models/ directory. "
+            "Please add at least one `.h5` model."
+        )
+        return
 
-        st.image(cv2.cvtColor(img, cv2.COLOR_BGR2RGB), caption="Original", use_container_width=True)
+    selected_label = st.selectbox(
+        "Select classifier", options=[path.name for path in classifier_paths], index=0
+    )
+    selected_path = next(path for path in classifier_paths if path.name == selected_label)
 
-        yolo_model = load_yolo_model()
-        face_img = extract_face_yolo(img, yolo_model)
+    uploaded_file = st.file_uploader("Upload an image", type=("jpg", "jpeg", "png"))
+    if not uploaded_file:
+        st.info("Supported input: JPG or PNG portrait images.")
+        return
 
-        if face_img.shape[0] < 10 or face_img.shape[1] < 10:
-            st.warning("❌ Gesicht konnte nicht zuverlässig erkannt werden.")
-            return
+    file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
+    original = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
 
-        st.image(cv2.cvtColor(face_img, cv2.COLOR_BGR2RGB), caption="Erkanntes Gesicht", use_container_width=True)
+    if original is None:
+        st.error("The file could not be decoded as an image.")
+        return
 
-        model_input = preprocess_image(face_img)
-        cnn_model = load_cnn_model(os.path.join(MODEL_DIR, selected_model_name))
-        prediction = cnn_model.predict(model_input)
+    st.image(cv2.cvtColor(original, cv2.COLOR_BGR2RGB), caption="Original image", use_container_width=True)
 
-        label = "Echt" if prediction[0][0] < 0.5 else "KI-generiert"
-        st.write(f"**Vorhersage:** {label}")
-        st.write(f"Vorhersagewert: {prediction[0][0]:.2f}")
+    detector = load_yolo_model()
+    face = _extract_face(original, detector)
+
+    if face is None or face.size == 0 or min(face.shape[:2]) < 20:
+        st.warning("No reliable face crop detected. Please try another image.")
+        return
+
+    st.image(cv2.cvtColor(face, cv2.COLOR_BGR2RGB), caption="Detected face", use_container_width=True)
+
+    classifier = load_classifier(selected_path)
+    model_input = _preprocess_face(face)
+    prediction = classifier.predict(model_input)
+
+    score = float(prediction.ravel()[0])
+    label = "real" if score < 0.5 else "AI-generated"
+    st.markdown(f"### Prediction: **{label.title()}**")
+    st.write(f"Confidence score: {score:.3f} (values closer to 0 indicate real images).")
+
 
 if __name__ == "__main__":
     main()

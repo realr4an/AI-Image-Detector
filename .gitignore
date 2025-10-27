@@ -1,10 +1,23 @@
-*.jpg
-*.png
-Dataset
-*.DS_Store
-/old_modells/*
-/data/*
-/models/*
-/face_detection_project/*
-*.DS_Store
-/downloads/*
+# Python artifacts
+.venv/
+__pycache__/
+*.pyc
+
+# Local datasets and downloads
+/Data/
+/downloads/
+/misclassified_faces/
+/face_detection_project/
+/logs/
+
+# Models are large; keep them outside git (pull via scripts/download_all_models.py)
+/Models/
+
+# Historical exports kept only locally
+/old_modells/
+
+# Keep documentation or notes inside Models/
+!Models/**/README.md
+
+# Allow documentation assets to be versioned
+!docs/**
