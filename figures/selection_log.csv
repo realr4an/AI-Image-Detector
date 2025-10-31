@@ -1,0 +1,20 @@
+figure,label,path,score,note
+datasets_deepfake_vs_real60k.png,Real,data\validation\real\real_6906.jpg,,docs collage
+datasets_deepfake_vs_real60k.png,Real,data\validation\real\0001 (6466).png,,docs collage
+datasets_deepfake_vs_real60k.png,Fake,data\validation\fake\0001 (14814).jpg,,docs collage
+datasets_deepfake_vs_real60k.png,Fake,data\validation\fake\fake_14112.jpg,,docs collage
+datasets_detect_ai_generated.png,Real,data\validation\real\non-child-885.png,,docs collage
+datasets_detect_ai_generated.png,Real,data\validation\real\real_12717.jpg,,docs collage
+datasets_detect_ai_generated.png,Fake,data\validation\fake\fake_19420.jpg,,docs collage
+datasets_detect_ai_generated.png,Fake,data\validation\fake\fake_2342.jpg,,docs collage
+datasets_deepfake_and_real_images.png,Real,data\validation\real\real_2723.jpg,,docs collage
+datasets_deepfake_and_real_images.png,Real,data\validation\real\real_1745.jpg,,docs collage
+datasets_deepfake_and_real_images.png,Fake,data\validation\fake\fake_13622.jpg,,docs collage
+datasets_deepfake_and_real_images.png,Fake,data\validation\fake\fake_8291.jpg,,docs collage
+intro_example.png,Real,data\validation\real\real_1424.jpg,,validation split sample
+intro_example.png,Real,data\validation\real\real_332.jpg,,validation split sample
+intro_example.png,Fake,data\validation\fake\fake_14114.jpg,,validation split sample
+intro_example.png,Fake,data\validation\fake\fake_11543.jpg,,validation split sample
+frequency_cnn_visualization.png,input_image,data\validation\real\0001 (10002).png,,frequency illustration sample
+eval_false_positive.png,Real (FP),data\validation\real\real_687.jpg,0.0299,bbox only
+eval_false_negative.png,Fake (Recovered),data\validation\fake\fake_9686.jpg,0.4377,bbox only
