@@ -19,8 +19,6 @@ AI-Image-Detector/
 │   ├── PrepData/                 # Dataset and model download tools
 │   ├── Trainer/                  # Training pipelines for classifiers and YOLO
 │   └── requirements.txt          # Python dependencies
-├── docs/
-│   └── raw_training_artifacts/   # Example outputs, curves, and debugging notes
 ├── logs/                         # TensorBoard runs written while training
 ├── image.png                     # Placeholder asset (kept for reference)
 └── README.md
@@ -126,7 +124,7 @@ python Scripts/evaluate_models.py
 ## Data & Assets
 - `Data/` is created by the preparation scripts and stays outside version control. You can regenerate the complete train/validation/test tree at any time.
 - `Models/` is populated either by training scripts or via the Hugging Face downloader. Each repository is stored in its own subdirectory; the Streamlit apps and `Scripts/evaluate_models.py` recursively search this tree and automatically pick up `.h5` checkpoints.
-- `docs/raw_training_artifacts/` holds representative plots, confusion matrices, YOLO batches, and lab notes that document previous experiments.
+- Additional documentation or figures (e.g., `docs/figures/`, report exports) are generated on demand and are not tracked in this repository.
 - `logs/fit/` contains TensorBoard event files generated during training sessions and can be inspected with `tensorboard --logdir logs/fit`.
 
 ## Troubleshooting
