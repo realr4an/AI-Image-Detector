@@ -18,6 +18,9 @@ if not HF_TOKEN:
 HF_USERNAME = os.getenv("HF_USERNAME", "realr4an")
 ROOT_DIR = Path(__file__).resolve().parents[2]
 MODELS_DIR = ROOT_DIR / "Models"
+REPO_ALIASES = {
+    "yolov8_face_detector": "YOLOv8_Face_Detection",
+}
 
 logging.basicConfig(
     level=logging.INFO,
@@ -46,7 +49,8 @@ def list_model_repos(api: HfApi, username: str) -> Iterable[str]:
 
 def download_repo_snapshot(repo_id: str, token: str) -> None:
     """Download a full snapshot of the given repository into Models/<repo>."""
-    model_name = repo_id.split("/")[-1]
+    repo_name = repo_id.split("/")[-1]
+    model_name = REPO_ALIASES.get(repo_name, repo_name)
     target_dir = MODELS_DIR / model_name
 
     if target_dir.exists():

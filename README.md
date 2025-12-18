@@ -54,8 +54,14 @@ AI-Image-Detector/
    set HF_TOKEN=hf_your_token        # Windows PowerShell
    python Scripts/PrepData/download_all_models.py
    ```
-   - Downloads the Hugging Face repositories owned by `HF_USERNAME` into `Models/`.
-   - Ultralytics checkpoints (e.g., `yolov8n.pt`) are not bundled—either let the YOLO trainer download them or place the files manually before running the apps.
+   - Downloads every model repository owned by `HF_USERNAME` into `Models/<repo_name>/...`.
+   - Current layout on Hugging Face:
+     - `realr4an/ResNet50_20250710-061102` → `Models/ResNet50_20250710-061102/ResNet50_20250710-061102.h5`
+     - `realr4an/ResNet50_YOLO_Pipeline_20250713-230159` → `Models/ResNet50_YOLO_Pipeline_20250713-230159/ResNet50_YOLO_Pipeline_20250713-230159.h5`
+     - `realr4an/yolov8_face_detector` → `Models/YOLOv8_Face_Detection/weights/best.pt` plus logs (mirrors the training folder structure)
+     - `realr4an/old_models` → archival checkpoints under `Models/old_models/`
+   - Streamlit apps (see below) search recursively, so the downloaded `.h5` checkpoints work out of the box without moving files.
+   - Ultralytics base checkpoints (e.g., `yolov8n.pt`) are not part of these repos—either let the YOLO trainer fetch them on first run or place the files manually before running the apps.
 
 ## Running the Apps
 - **Face pipeline with YOLO cropping**  
@@ -118,7 +124,7 @@ python Scripts/evaluate_models.py
 
 ## Data & Assets
 - `Data/` is intentionally excluded from version control. Regenerate via the prep scripts or drop curated content there manually.
-- `Models/` is likewise generated on demand. Keep public checkpoints (e.g., YOLO, ResNet) outside the repo or download them from Hugging Face.
+- `Models/` is likewise generated on demand. The helper downloads each Hugging Face repo into its own subdirectory; tools such as the Streamlit apps and `Scripts/evaluate_models.py` traverse the tree recursively and will discover `.h5` checkpoints wherever they land.
 - `docs/raw_training_artifacts/` contains representative plots, confusion matrices, and short lab notes to document previous experiments.
 - Additional derived figures/logs (`docs/figures`, `docs/training_logs`, thesis sources, etc.) were removed for the submission package—restore them from your working copy if needed.
 

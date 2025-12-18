@@ -13,22 +13,15 @@ from ultralytics import YOLO
 
 ROOT_DIR = Path(__file__).resolve().parents[2]
 MODEL_ROOT = ROOT_DIR / "Models"
-CLASSIFIER_DIRS = [
-    MODEL_ROOT,
-    MODEL_ROOT / "ResNet50_Deepfake_detection",
-]
 MODEL_EXTENSION = ".h5"
 YOLO_WEIGHTS = MODEL_ROOT / "YOLOv8_Face_Detection" / "weights" / "best.pt"
 
 
 def _list_classifier_paths() -> List[Path]:
     """Return all available Keras classifier checkpoints."""
-    paths: List[Path] = []
-    for directory in CLASSIFIER_DIRS:
-        if not directory.exists():
-            continue
-        paths.extend(sorted(directory.glob(f"*{MODEL_EXTENSION}")))
-    return paths
+    if not MODEL_ROOT.exists():
+        return []
+    return sorted(path for path in MODEL_ROOT.rglob(f"*{MODEL_EXTENSION}") if path.is_file())
 
 
 @st.cache_resource(show_spinner="Loading YOLO face detector ...")

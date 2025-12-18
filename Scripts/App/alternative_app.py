@@ -12,20 +12,13 @@ from tensorflow.keras.applications.resnet50 import preprocess_input
 
 ROOT_DIR = Path(__file__).resolve().parents[2]
 MODEL_ROOT = ROOT_DIR / "Models"
-CLASSIFIER_DIRS = [
-    MODEL_ROOT,
-    MODEL_ROOT / "ResNet50_Deepfake_detection",
-]
 MODEL_EXTENSION = ".h5"
 
 
 def _list_classifier_paths() -> List[Path]:
-    paths: List[Path] = []
-    for directory in CLASSIFIER_DIRS:
-        if not directory.exists():
-            continue
-        paths.extend(sorted(directory.glob(f"*{MODEL_EXTENSION}")))
-    return paths
+    if not MODEL_ROOT.exists():
+        return []
+    return sorted(path for path in MODEL_ROOT.rglob(f"*{MODEL_EXTENSION}") if path.is_file())
 
 
 @st.cache_resource(show_spinner="Loading classifier ...")
