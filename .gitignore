@@ -2,6 +2,7 @@
 .venv/
 __pycache__/
 *.pyc
+._*
 
 # Local datasets and downloads
 /Data/
@@ -21,3 +22,5 @@ __pycache__/
 
 # Allow documentation assets to be versioned
 !docs/**
+
+docs/**/._*
